@@ -1,0 +1,39 @@
+name: Publicar en redes (IG + FB)
+
+on:
+  schedule:
+    # 14:00 UTC ≈ 9:00 a.m. Colombia. Ajusta la hora si quieres.
+    - cron: "0 14 * * *"
+  workflow_dispatch: {} # botón manual "Run workflow" en la pestaña Actions
+
+permissions:
+  contents: write # para hacer commit del state.json actualizado
+
+concurrency:
+  group: social-post
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Publicar
+        env:
+          META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
+          META_IG_USER_ID: ${{ secrets.META_IG_USER_ID }}
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+        run: npm run post
+
+      - name: Guardar el índice de rotación
+        run: |
+          git config user.name "iteknology-bot"
+          git config user.email "bot@iteknology.local"
+          git add content/state.json
+          git commit -m "chore: avanzar rotación de posts [skip ci]" || echo "sin cambios"
+          git push

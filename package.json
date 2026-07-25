@@ -1,0 +1,14 @@
+{
+  "name": "iteknologypro-marketing",
+  "version": "1.0.0",
+  "description": "Automatización de publicaciones en redes (IG + FB) con branding iTeknology para motivar la creación de tiendas.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "post": "node scripts/post.mjs",
+    "post:dry": "DRY_RUN=1 node scripts/post.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
