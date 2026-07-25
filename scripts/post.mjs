@@ -84,6 +84,21 @@ async function postInstagram(igUserId, token, imageUrl, caption) {
   return publish.id;
 }
 
+// Publicar en una Página de Facebook exige un Page Access Token, no el token de
+// usuario/system-user. Lo derivamos en runtime desde META_ACCESS_TOKEN.
+async function getPageToken(pageId, token) {
+  const res = await fetch(
+    `${GRAPH}/${pageId}?fields=access_token&access_token=${encodeURIComponent(token)}`
+  );
+  const json = await res.json();
+  if (!res.ok || !json.access_token) {
+    throw new Error(
+      `No pude obtener el Page Access Token: ${JSON.stringify(json.error || json)}`
+    );
+  }
+  return json.access_token;
+}
+
 async function main() {
   const pageId = need("META_PAGE_ID");
   const igUserId = need("META_IG_USER_ID");
@@ -113,12 +128,14 @@ async function main() {
   if (DRY) {
     console.log("DRY_RUN: no se publica nada.");
   } else {
+    // Page token para FB (obligatorio) y también sirve para publicar en IG.
+    const pageToken = await getPageToken(pageId, token);
     if (TARGETS.includes("fb")) {
-      results.fb = await postFacebook(pageId, token, imageUrl, caption);
+      results.fb = await postFacebook(pageId, pageToken, imageUrl, caption);
       console.log(`  FB ok: ${results.fb}`);
     }
     if (TARGETS.includes("ig")) {
-      results.ig = await postInstagram(igUserId, token, imageUrl, caption);
+      results.ig = await postInstagram(igUserId, pageToken, imageUrl, caption);
       console.log(`  IG ok: ${results.ig}`);
     }
   }
