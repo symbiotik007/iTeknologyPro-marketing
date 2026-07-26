@@ -71,12 +71,27 @@ async function postFacebook(pageId, token, imageUrl, message) {
   return out.post_id || out.id;
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Espera a que el contenedor de IG termine de procesarse (status_code=FINISHED).
+async function waitContainerReady(creationId, token) {
+  for (let i = 0; i < 20; i++) {
+    const res = await fetch(`${GRAPH}/${creationId}?fields=status_code&access_token=${encodeURIComponent(token)}`);
+    const json = await res.json();
+    if (json.status_code === "FINISHED") return;
+    if (json.status_code === "ERROR") throw new Error("IG: el contenedor falló al procesarse");
+    await sleep(3000);
+  }
+  throw new Error("IG: el contenedor no quedó listo a tiempo");
+}
+
 async function postInstagram(igUserId, token, imageUrl, caption) {
   const container = await graph(`${GRAPH}/${igUserId}/media`, {
     image_url: imageUrl,
     caption,
     access_token: token,
   });
+  await waitContainerReady(container.id, token); // IG necesita procesar antes de publicar
   const publish = await graph(`${GRAPH}/${igUserId}/media_publish`, {
     creation_id: container.id,
     access_token: token,
