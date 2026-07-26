@@ -67,7 +67,7 @@ Alta calidad, sin marcas de agua, tipografía sans-serif audaz y legible.
 
 ## Disponibles (próximo lote)
 
-### Tu marca, tus reglas
+### Tu marca, tus reglas -USED → 06.jpg
 ```
 Post cuadrado 1080x1080 para redes, marca de tecnología "iTeknology". Azul #2563eb y blanco.
 Estilo minimalista con un mockup de tienda online personalizada (logo y colores propios) en un smartphone.
@@ -76,7 +76,7 @@ Subtítulo: "Control total de tu negocio."
 Espacio inferior para logo y botón azul "Crea tu tienda gratis". Alta calidad, sin marcas de agua.
 ```
 
-### Sin código
+### Sin código -USED → 07.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Paleta azul #2563eb y blanco.
 Concepto: una persona sonriente creando su tienda en una laptop, con íconos flotantes de arrastrar-y-soltar. Estilo ilustración plana moderna y cálida.

@@ -6,9 +6,14 @@
   "private": true,
   "scripts": {
     "post": "node scripts/post.mjs",
-    "post:dry": "DRY_RUN=1 node scripts/post.mjs"
+    "post:dry": "DRY_RUN=1 node scripts/post.mjs",
+    "generate": "node scripts/generate.mjs",
+    "chrome": "node scripts/launch-chrome.mjs"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
   }
 }
