@@ -97,13 +97,27 @@ Listo. A partir de ahí publica solo, todos los días a las 9:00 a.m. Colombia.
 ## Estructura
 
 ```
-.github/workflows/post.yml   cron + publicación en Actions
-scripts/post.mjs             lógica de publicación (Graph API)
-content/copy.json            banco de textos (rota uno por día)
-content/images/              tus imágenes (rota una por día)
-content/state.json           índice de rotación (lo actualiza el bot)
-PROMPTS.md                   prompts para generar las imágenes
-.env.example                 plantilla para pruebas locales
+.github/workflows/post.yml           cron viejo (rotación simple, ahora solo manual)
+.github/workflows/publish-queue.yml  cron 2x/día: publica lo aprobado en content/queue/
+scripts/lib/graph.mjs                Graph API compartida (imagen, carrusel, reel)
+scripts/lib/telegram.mjs             bot de aprobación (botones Aprobar/Rechazar)
+scripts/lib/video.mjs                arma el reel (slideshow ffmpeg) desde N imágenes
+scripts/post.mjs                     publicación simple (rotación vieja, fallback)
+scripts/generate-content.mjs         arma un item de queue + notifica por Telegram
+scripts/publish-queue.mjs            revisa aprobación y publica (single/carrusel/reel)
+content/copy.json                    banco de textos viejo (rota uno por día, fallback)
+content/images/                      imágenes viejas (rotación, fallback)
+content/state.json                   índice de rotación del fallback
+content/queue/<id>/                  posts generados esperando aprobación/publicación
+  meta.json                            { id, type: "single"|"carousel"|"reel", targets, status }
+  caption.txt                          texto del post
+  assets/                              imágenes (.jpg) o video.mp4 (si type=reel)
+content/published/<id>/              histórico de lo ya publicado (se mueve desde queue/)
+content/generator-brief.md           brief de marca/ángulos para el agente generador
+                                      (diseño vía Gemini/generate.mjs, no Canva —
+                                      Canva Brand Template requiere plan pago)
+PROMPTS.md                           prompts para generar las imágenes
+.env.example                         plantilla para pruebas locales
 ```
 
 ## Después (cuando haya presupuesto / tiempo)

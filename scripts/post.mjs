@@ -18,8 +18,8 @@
 import { readFile, writeFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { getPageToken, postFacebookPhoto, postInstagramImage } from "./lib/graph.mjs";
 
-const GRAPH = "https://graph.facebook.com/v21.0";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const IMAGES_DIR = path.join(ROOT, "content", "images");
@@ -50,68 +50,6 @@ function rawUrl(filename) {
   const ref = process.env.GITHUB_REF_NAME || "main";
   if (!repo) throw new Error("Sin GITHUB_REPOSITORY ni RAW_BASE: no puedo armar la URL pública de la imagen");
   return `https://raw.githubusercontent.com/${repo}/${ref}/content/images/${encodeURIComponent(filename)}`;
-}
-
-async function graph(url, params) {
-  const body = new URLSearchParams(params);
-  const res = await fetch(url, { method: "POST", body });
-  const json = await res.json();
-  if (!res.ok) {
-    throw new Error(`Graph API ${res.status}: ${JSON.stringify(json.error || json)}`);
-  }
-  return json;
-}
-
-async function postFacebook(pageId, token, imageUrl, message) {
-  const out = await graph(`${GRAPH}/${pageId}/photos`, {
-    url: imageUrl,
-    message,
-    access_token: token,
-  });
-  return out.post_id || out.id;
-}
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-// Espera a que el contenedor de IG termine de procesarse (status_code=FINISHED).
-async function waitContainerReady(creationId, token) {
-  for (let i = 0; i < 20; i++) {
-    const res = await fetch(`${GRAPH}/${creationId}?fields=status_code&access_token=${encodeURIComponent(token)}`);
-    const json = await res.json();
-    if (json.status_code === "FINISHED") return;
-    if (json.status_code === "ERROR") throw new Error("IG: el contenedor falló al procesarse");
-    await sleep(3000);
-  }
-  throw new Error("IG: el contenedor no quedó listo a tiempo");
-}
-
-async function postInstagram(igUserId, token, imageUrl, caption) {
-  const container = await graph(`${GRAPH}/${igUserId}/media`, {
-    image_url: imageUrl,
-    caption,
-    access_token: token,
-  });
-  await waitContainerReady(container.id, token); // IG necesita procesar antes de publicar
-  const publish = await graph(`${GRAPH}/${igUserId}/media_publish`, {
-    creation_id: container.id,
-    access_token: token,
-  });
-  return publish.id;
-}
-
-// Publicar en una Página de Facebook exige un Page Access Token, no el token de
-// usuario/system-user. Lo derivamos en runtime desde META_ACCESS_TOKEN.
-async function getPageToken(pageId, token) {
-  const res = await fetch(
-    `${GRAPH}/${pageId}?fields=access_token&access_token=${encodeURIComponent(token)}`
-  );
-  const json = await res.json();
-  if (!res.ok || !json.access_token) {
-    throw new Error(
-      `No pude obtener el Page Access Token: ${JSON.stringify(json.error || json)}`
-    );
-  }
-  return json.access_token;
 }
 
 async function main() {
@@ -146,11 +84,11 @@ async function main() {
     // Page token para FB (obligatorio) y también sirve para publicar en IG.
     const pageToken = await getPageToken(pageId, token);
     if (TARGETS.includes("fb")) {
-      results.fb = await postFacebook(pageId, pageToken, imageUrl, caption);
+      results.fb = await postFacebookPhoto(pageId, pageToken, imageUrl, caption);
       console.log(`  FB ok: ${results.fb}`);
     }
     if (TARGETS.includes("ig")) {
-      results.ig = await postInstagram(igUserId, pageToken, imageUrl, caption);
+      results.ig = await postInstagramImage(igUserId, pageToken, imageUrl, caption);
       console.log(`  IG ok: ${results.ig}`);
     }
   }

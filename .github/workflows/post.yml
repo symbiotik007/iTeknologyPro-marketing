@@ -1,9 +1,9 @@
-name: Publicar en redes (IG + FB)
+name: Publicar en redes (IG + FB) — rotación simple (manual)
+# Reemplazado como cron principal por publish-queue.yml (2x/día + aprobación
+# Telegram + carrusel/reel). Este workflow queda solo para correrlo a mano
+# (Actions → Run workflow) si algún día se quiere forzar la rotación vieja.
 
 on:
-  schedule:
-    # 14:00 UTC ≈ 9:00 a.m. Colombia. Ajusta la hora si quieres.
-    - cron: "0 14 * * *"
   workflow_dispatch: {} # botón manual "Run workflow" en la pestaña Actions
 
 permissions:
