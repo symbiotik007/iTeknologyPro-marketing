@@ -39,7 +39,7 @@ Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, minimalista,
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, premium, sin emojis. Varias plantillas de tienda en miniatura, una seleccionada con un check. Titular: "ELIGE UNA PLANTILLA Y PUBLICA". Subtítulo: "Tu tienda profesional, sin diseñador." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 5. Tu tienda lista hoy
+### 5. Tu tienda lista hoy -USED → 01.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Fondo azul #2563eb con detalles blancos, premium, sin emojis. Un reloj o cronómetro que marca pocos minutos junto a un smartphone con una tienda. Titular: "TU TIENDA LISTA HOY". Subtítulo: "No en semanas. En minutos." Logo iTeknology + botón blanco "Crea tu tienda gratis". Sin marcas de agua.
 ```
