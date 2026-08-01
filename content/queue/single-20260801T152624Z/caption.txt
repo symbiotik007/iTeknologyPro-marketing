@@ -1,0 +1,1 @@
+🧪 Prueba pipeline generate-content.mjs — ignorar, se borra tras validar.
