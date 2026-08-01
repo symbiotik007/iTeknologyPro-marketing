@@ -1,0 +1,6 @@
+{
+  "type": "single",
+  "targets": ["fb","ig"],
+  "caption": "Prueba automatica del pipeline iTeknology - ignorar, se borra despues.",
+  "prompts": ["Genera una imagen simple de un circulo verde solido sobre fondo blanco, sin texto, 1080x1080."]
+}
