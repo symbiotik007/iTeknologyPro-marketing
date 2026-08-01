@@ -113,17 +113,13 @@ async function main() {
   await writeFile(STATE_FILE, JSON.stringify(state, null, 2) + "\n");
 
   const { spawnSync } = await import("node:child_process");
+  const { push: gitPush, commit: gitCommit } = await import("./lib/git.mjs");
   function git(...args) {
     const r = spawnSync("git", args, { cwd: ROOT, stdio: "inherit" });
     if (r.status !== 0) throw new Error(`git ${args.join(" ")} falló`);
   }
   git("add", "content/prompts-vault.md", "content/generator-state.json");
-  const c = spawnSync(
-    "git",
-    ["-c", "user.name=iteknology-bot", "-c", "user.email=bot@iteknology.local", "commit", "-m", "chore: prompts usados + estado de rotacion [skip ci]"],
-    { cwd: ROOT, stdio: "inherit" }
-  );
-  if (c.status === 0) git("push");
+  if (gitCommit(ROOT, "chore: prompts usados + estado de rotacion [skip ci]")) gitPush(ROOT);
 
   console.log("Armando item de queue + notificando Telegram...");
   const r = spawnSync("node", ["scripts/generate-content.mjs", draftFile], {

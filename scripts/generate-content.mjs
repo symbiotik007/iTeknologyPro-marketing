@@ -26,6 +26,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildSlideshow } from "./lib/video.mjs";
 import { sendPhoto, sendVideo, sendCarouselPreview, approvalKeyboard } from "./lib/telegram.mjs";
+import { push as gitPush, commit as gitCommit } from "./lib/git.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -112,12 +113,8 @@ async function main() {
   // Publicar el contenido en el repo ANTES de avisar por Telegram: la URL
   // pública (raw.githubusercontent.com) solo sirve una vez que el push llegó.
   git("add", path.join("content", "queue", id));
-  git(
-    "-c", "user.name=iteknology-bot",
-    "-c", "user.email=bot@iteknology.local",
-    "commit", "-m", `chore: nuevo post en queue (${id}) [skip ci]`
-  );
-  git("push");
+  gitCommit(ROOT, `chore: nuevo post en queue (${id}) [skip ci]`);
+  gitPush(ROOT);
   console.log("  commit + push ok");
 
   const keyboard = approvalKeyboard(id);
@@ -140,12 +137,8 @@ async function main() {
   meta.telegramMessageId = tgResult.message_id;
   await writeFile(path.join(itemDir, "meta.json"), JSON.stringify(meta, null, 2) + "\n");
   git("add", path.join("content", "queue", id, "meta.json"));
-  git(
-    "-c", "user.name=iteknology-bot",
-    "-c", "user.email=bot@iteknology.local",
-    "commit", "-m", `chore: telegram message id para ${id} [skip ci]`
-  );
-  git("push");
+  gitCommit(ROOT, `chore: telegram message id para ${id} [skip ci]`);
+  gitPush(ROOT);
 
   console.log(`\nListo. Queue item ${id} esperando aprobación en Telegram.`);
 }
