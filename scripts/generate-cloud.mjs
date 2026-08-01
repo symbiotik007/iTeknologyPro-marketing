@@ -50,8 +50,21 @@ async function main() {
 
   console.log(`Generando ${prompts.length} imagen(es) vía Gemini headless…`);
 
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ storageState: statePath });
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--disable-blink-features=AutomationControlled"],
+  });
+  const context = await browser.newContext({
+    storageState: statePath,
+    locale: "es-CO",
+    timezoneId: "America/Bogota",
+    userAgent:
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+    viewport: { width: 1366, height: 900 },
+  });
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => undefined });
+  });
 
   try {
     for (let i = 0; i < prompts.length; i++) {
