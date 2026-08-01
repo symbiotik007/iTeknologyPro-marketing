@@ -43,7 +43,20 @@ sin intervención humana salvo la aprobación/rechazo por Telegram.
 Sugerencia de rotación simple: mañana → single o carousel alternando; tarde →
 el que no se usó en la mañana, con un reel cada 3-4 días en vez de un carousel.
 
-## Diseño (Gemini, no Canva)
+## Diseño en el routine cloud programado: HighsField primero
+
+El routine cloud (Anthropic CCR) no tiene forma segura de recibir
+`GEMINI_SESSION_STATE` (equivale a un login completo de Google — no se expone
+en texto plano en la config de un routine). Para las corridas automáticas
+2x/día, usar **la herramienta MCP `HighsField generate_image`** (conector ya
+enlazado al routine, sin secreto en texto plano) como método principal de
+diseño, con `use_unlim: true` si hay cupo gratis disponible.
+
+`scripts/generate-cloud.mjs` (Gemini headless) queda disponible para uso
+manual/local o para una futura corrida que sí tenga un canal seguro de
+secretos — no lo uses en el routine cloud actual.
+
+## Diseño (Gemini, no Canva) — referencia para uso local/manual
 
 Canva Brand Template requiere plan pago (Pro/Teams/Enterprise) que la cuenta
 conectada no tiene — `publish-brand-template` falla con
@@ -63,23 +76,16 @@ automatización:
   debug port ya está corriendo — `npm run chrome` primero).
 ### Manejo de fallas (obligatorio, no lo saltes)
 
-La sesión de Gemini exportada (`GEMINI_SESSION_STATE`) es frágil — cookies
-caducan, Google puede pedir reverificación desde IP de datacenter. Por eso
-**nunca se sube como Secret sin este fallback ya wireado**:
+En el routine cloud, el diseño va directo por `HighsField generate_image`
+(`use_unlim: true` si hay cupo gratis). Si falla o no hay cupo:
 
-1. Correr `node scripts/generate-cloud.mjs prompts.json outDir/`.
-2. Si sale con **exit code 2** → sesión caducada/bloqueada. Mandar un mensaje
-   por Telegram (`sendMessage`) avisando: *"⚠️ Sesión de Gemini caducó — corre
-   `npm run chrome` + `node scripts/export-gemini-session.mjs` y sube el
-   Secret de nuevo"*. Luego usar el fallback (paso 4).
-3. Si sale con **exit code 1** (otro error: timeout, selector roto, etc.) →
-   loguearlo, intentar UNA vez más; si vuelve a fallar, ir al fallback.
-4. **Fallback**: usar la herramienta MCP `HighsField generate_image` con
-   `use_unlim: true` (cupo gratis) para no romper la publicación de esa
-   corrida. Si tampoco hay cupo gratis disponible, avisar por Telegram y NO
-   generar contenido esa corrida (mejor saltarse un post que publicar algo a
-   medias) — `publish-queue.mjs` ya cae solo a la rotación vieja si la queue
-   queda vacía.
+- Avisar por Telegram (`sendMessage` de `scripts/lib/telegram.mjs`) y NO
+  generar contenido esa corrida (mejor saltarse un post que publicar algo a
+  medias) — `publish-queue.mjs` ya cae solo a la rotación vieja de
+  `content/images/` si la queue queda vacía.
+
+(La ruta Gemini vía `generate-cloud.mjs` con detección de sesión caducada —
+exit code 2 — sigue documentada más abajo para cuando se use local/manual.)
 
 - Prompt de referencia (layout "Feature Highlight" ya validado):
   ```
