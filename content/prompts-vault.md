@@ -34,7 +34,7 @@ Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, ilustración
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, minimalista, sin emojis. Secuencia visual de 3 pasos: una idea (bombilla) → una tienda online → una notificación de venta. Titular: "DE LA IDEA A TU PRIMERA VENTA". Subtítulo: "En un solo día." Logo iTeknology + botón "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 4. Elige una plantilla y publica
+### 4. Elige una plantilla y publica -USED → 01.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, premium, sin emojis. Varias plantillas de tienda en miniatura, una seleccionada con un check. Titular: "ELIGE UNA PLANTILLA Y PUBLICA". Subtítulo: "Tu tienda profesional, sin diseñador." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
