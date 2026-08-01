@@ -1,10 +1,10 @@
-name: Generar contenido (Gemini) desde draft pendiente
+name: Generar contenido (Gemini) desde draft pendiente — DESACTIVADO
+# Gemini se desloguea cuando corre desde la IP de datacenter de GitHub Actions
+# (confirmado, screenshot). La generación real ahora corre LOCAL vía
+# scripts/generate-local.mjs (Task Scheduler de Windows). Este workflow queda
+# solo para correrlo a mano si algún día se resuelve lo de la IP (ej. proxy).
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "content/pending-draft.json"
   workflow_dispatch: {} # botón manual "Run workflow" en la pestaña Actions
 
 permissions:

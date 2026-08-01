@@ -7,3 +7,4 @@ node_modules/
 content/_raw/
 *storage-state*
 *.b64
+scripts/run-generate-local.bat
