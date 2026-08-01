@@ -44,27 +44,27 @@ Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, premium, sin
 Post cuadrado 1080x1080, marca "iTeknology". Fondo azul #2563eb con detalles blancos, premium, sin emojis. Un reloj o cronómetro que marca pocos minutos junto a un smartphone con una tienda. Titular: "TU TIENDA LISTA HOY". Subtítulo: "No en semanas. En minutos." Logo iTeknology + botón blanco "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 6. Sin programadores ni agencias
+### 6. Sin programadores ni agencias -USED → 01.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, minimalista, sin emojis. Palabras tachadas sutilmente: "programador", "agencia", "código", y una tienda online resaltada. Titular: "NO NECESITAS PROGRAMADOR". Subtítulo: "iTeknology lo hace por ti." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 7. Tu primer pedido hoy
+### 7. Tu primer pedido hoy -USED → 02.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, premium, sin emojis. Un smartphone con una notificación de "Nuevo pedido" destacada. Titular: "RECIBE TU PRIMER PEDIDO HOY". Subtítulo: "Empieza a vender de una vez." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 8. Prueba gratis, sin tarjeta
+### 8. Prueba gratis, sin tarjeta -USED → 03.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, limpio, sin emojis. Insignias/badges de "100% gratis" y "sin tarjeta de crédito". Titular: "EMPIEZA GRATIS, SIN TARJETA". Subtítulo: "Sin compromiso. Cancela cuando quieras." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 9. El mejor momento es hoy
+### 9. El mejor momento es hoy -USED → 04.jpg
 ```
 Post cuadrado 1080x1080 motivacional, marca "iTeknology". Fondo azul #2563eb con detalles blancos, premium, sin emojis. Un cohete despegando, sensación de impulso. Titular: "EL MEJOR MOMENTO ES HOY". Subtítulo: "Tu negocio online, listo en minutos." Logo iTeknology + botón blanco "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 10. Crea, personaliza, vende
+### 10. Crea, personaliza, vende -USED → 05.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, minimalista, sin emojis. Tres íconos en fila: crear (lápiz), personalizar (paleta), vender (bolsa). Titular: "CREA. PERSONALIZA. VENDE." Subtítulo: "Tres pasos y estás en línea." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
