@@ -119,6 +119,14 @@ export async function askGeminiForImage(page, prompt) {
   await sleep(3000);
 
   if (!(await isLoggedIn(page))) {
+    // Diagnóstico: guardar screenshot + texto visible para saber si de verdad
+    // pide login o si es un falso positivo (banner de consentimiento, etc).
+    try {
+      await page.screenshot({ path: "/tmp/gemini-debug.png" }).catch(() => {});
+      const bodyText = await page.evaluate(() => document.body.innerText.slice(0, 1000));
+      console.log("DEBUG body text:", bodyText);
+      console.log("DEBUG url:", page.url());
+    } catch {}
     const err = new Error("SESIÓN_CADUCADA: Gemini pide iniciar sesión de nuevo");
     err.code = "SESSION_EXPIRED";
     throw err;

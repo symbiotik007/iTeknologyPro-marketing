@@ -40,3 +40,11 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: node scripts/process-pending-draft.mjs
+
+      - name: Subir screenshot de diagnostico (si fallo)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-debug
+          path: /tmp/gemini-debug.png
+          if-no-files-found: ignore
