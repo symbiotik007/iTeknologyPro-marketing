@@ -1,0 +1,42 @@
+name: Generar contenido (Gemini) desde draft pendiente
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/pending-draft.json"
+  workflow_dispatch: {} # botón manual "Run workflow" en la pestaña Actions
+
+permissions:
+  contents: write # para commitear el item de queue + limpiar el draft
+
+concurrency:
+  group: social-post
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias (Playwright + Chromium)
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
+
+      - name: Configurar git para los commits del bot
+        run: |
+          git config user.name "iteknology-bot"
+          git config user.email "bot@iteknology.local"
+
+      - name: Procesar draft pendiente (genera imágenes + arma queue)
+        env:
+          GEMINI_SESSION_STATE: ${{ secrets.GEMINI_SESSION_STATE }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node scripts/process-pending-draft.mjs

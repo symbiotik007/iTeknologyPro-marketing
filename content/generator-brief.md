@@ -1,8 +1,10 @@
 # Brief para el agente generador de contenido — iTeknology
 
 Este archivo lo lee el agente Claude programado (2x/día) antes de generar un post
-nuevo. Objetivo: producir copy + diseño listos para `scripts/generate-content.mjs`,
-sin intervención humana salvo la aprobación/rechazo por Telegram.
+nuevo. Objetivo: decidir ángulo/tipo y escribir copy + prompts de imagen en
+`content/pending-draft.json` (solo texto, sin generar imágenes ni llamar MCP
+de imagen — eso lo hace GitHub Actions después, ver abajo), sin intervención
+humana salvo la aprobación/rechazo por Telegram.
 
 ## Marca
 
@@ -43,82 +45,72 @@ sin intervención humana salvo la aprobación/rechazo por Telegram.
 Sugerencia de rotación simple: mañana → single o carousel alternando; tarde →
 el que no se usó en la mañana, con un reel cada 3-4 días en vez de un carousel.
 
-## Diseño en el routine cloud programado: HighsField primero
+## Diseño: Gemini vía GitHub Actions (no en el routine cloud)
 
-El routine cloud (Anthropic CCR) no tiene forma segura de recibir
-`GEMINI_SESSION_STATE` (equivale a un login completo de Google — no se expone
-en texto plano en la config de un routine). Para las corridas automáticas
-2x/día, usar **la herramienta MCP `HighsField generate_image`** (conector ya
-enlazado al routine, sin secreto en texto plano) como método principal de
-diseño, con `use_unlim: true` si hay cupo gratis disponible.
+El routine cloud (Anthropic CCR) NO genera imágenes — no tiene forma segura de
+recibir `GEMINI_SESSION_STATE` (equivale a un login completo de Google, no se
+expone en texto plano en la config de un routine). En su lugar:
 
-`scripts/generate-cloud.mjs` (Gemini headless) queda disponible para uso
-manual/local o para una futura corrida que sí tenga un canal seguro de
-secretos — no lo uses en el routine cloud actual.
-
-## Diseño (Gemini, no Canva) — referencia para uso local/manual
-
-Canva Brand Template requiere plan pago (Pro/Teams/Enterprise) que la cuenta
-conectada no tiene — `publish-brand-template` falla con
-`"This feature requires a Canva paid plan"`. Se descarta Canva para este
-pipeline; se usa el mismo flujo que ya existía en el repo antes de esta
-automatización:
-
-- **Prompts de imagen** salen de `content/prompts-vault.md` (banco existente,
-  ángulo e-commerce genérico) — para el ángulo food-service, escribir el prompt
-  siguiendo el mismo formato/reglas de estilo del vault (ver ejemplo de
-  referencia abajo) y agregarlo como nueva entrada del vault.
-- **Generación real**: `scripts/generate.mjs` (Playwright + CDP contra Chrome
-  local del usuario, sesión de Gemini) — corre LOCAL, no en GitHub Actions. El
-  agente programado no puede correr Gemini web por sí mismo (necesita el Chrome
-  del usuario abierto); en su lugar, el agente arma el prompt de la corrida y
-  se lo entrega al usuario (o usa `generate.mjs` si detecta que Chrome con
-  debug port ya está corriendo — `npm run chrome` primero).
-### Manejo de fallas (obligatorio, no lo saltes)
-
-En el routine cloud, el diseño va directo por `HighsField generate_image`
-(`use_unlim: true` si hay cupo gratis). Si falla o no hay cupo:
-
-- Avisar por Telegram (`sendMessage` de `scripts/lib/telegram.mjs`) y NO
-  generar contenido esa corrida (mejor saltarse un post que publicar algo a
-  medias) — `publish-queue.mjs` ya cae solo a la rotación vieja de
-  `content/images/` si la queue queda vacía.
-
-(La ruta Gemini vía `generate-cloud.mjs` con detección de sesión caducada —
-exit code 2 — sigue documentada más abajo para cuando se use local/manual.)
-
-- Prompt de referencia (layout "Feature Highlight" ya validado):
-  ```
-  Post cuadrado 1080x1080 para Instagram/Facebook, marca "iTeknology". Fondo
-  con degradado oscuro navy/negro en el 45% central, resto blanco limpio. Azul
-  #2563eb + blanco, minimalista, premium, tech-forward, sin emojis. Tipografía
-  sans-serif nítida (Poppins/Inter). Zona superior: wordmark "iTeknology" en
-  blanco, esquina superior izquierda. Centro (bloque oscuro): mockup de
-  dashboard/panel de pedidos en smartphone. Headline blanco bold 1 línea +
-  subtítulo 1 línea más chico. Parte inferior (fondo blanco): botón pill azul
-  con CTA. Composición llena todo el canvas, sin márgenes accidentales, sin
-  texto cortado ni corrupto.
-  ```
-- Formato final: **1080x1080px JPG** (ya lo hace `toJpeg1080()` en
-  `generate.mjs`).
-
-## Proceso mecánico (después de tener copy + imágenes exportadas)
-
-1. Descargar las imágenes exportadas de Canva a disco (ruta temporal).
-2. Armar un `draft.json`:
+1. El routine cloud solo **decide el ángulo/tipo y escribe copy + prompts de
+   imagen** (texto, nada de MCP ni generación real).
+2. Guarda eso en `content/pending-draft.json`:
    ```json
-   { "type": "single|carousel|reel", "targets": ["fb","ig"], "caption": "...", "assets": ["ruta1.jpg", ...] }
+   { "type": "single|carousel|reel", "targets": ["fb","ig"], "caption": "...",
+     "prompts": ["prompt imagen 1", "prompt imagen 2", ...] }
    ```
-3. Correr `node scripts/generate-content.mjs draft.json` — esto arma
-   `content/queue/<id>/`, commitea+pushea, y notifica por Telegram con botones
-   Aprobar/Rechazar.
-4. No publicar nada directo — eso lo hace `scripts/publish-queue.mjs` en el
-   siguiente checkpoint de GitHub Actions (9:30am / 7:00pm Colombia).
+   (1 prompt para single, 5 para carousel/reel — usa el prompt de referencia
+   de la sección de abajo como base, variando el feature/ángulo).
+3. Hace `git add content/pending-draft.json && git commit && git push` — SOLO
+   eso, nada de MCP ni tokens.
+4. Ese push dispara `.github/workflows/generate-queue.yml`, que corre en
+   GitHub Actions (tiene `GEMINI_SESSION_STATE` como Secret real, cifrado):
+   genera las imágenes con Gemini headless (`scripts/generate-cloud.mjs`),
+   arma el item de queue (`scripts/generate-content.mjs`), notifica Telegram,
+   y borra el draft procesado. Todo esto ya sin que el routine cloud toque
+   ningún secreto.
+
+Ni HighsField ni Canva se usan en este flujo — Gemini es gratis/ilimitado y
+es el método principal.
+
+## Prompt de imagen (referencia, layout "Feature Highlight" ya validado)
+
+Usar esto como base para los `prompts` del draft, variando el feature/ángulo:
+
+```
+Post cuadrado 1080x1080 para Instagram/Facebook, marca "iTeknology". Fondo
+con degradado oscuro navy/negro en el 45% central, resto blanco limpio. Azul
+#2563eb + blanco, minimalista, premium, tech-forward, sin emojis. Tipografía
+sans-serif nítida (Poppins/Inter). Zona superior: wordmark "iTeknology" en
+blanco, esquina superior izquierda. Centro (bloque oscuro): mockup de
+dashboard/panel de pedidos en smartphone. Headline blanco bold 1 línea +
+subtítulo 1 línea más chico. Parte inferior (fondo blanco): botón pill azul
+con CTA. Composición llena todo el canvas, sin márgenes accidentales, sin
+texto cortado ni corrupto.
+```
+
+`content/prompts-vault.md` tiene más ejemplos ya validados (ángulo e-commerce
+genérico) — reusar ese estilo/formato para escribir prompts nuevos.
+
+## Manejo de fallas (obligatorio, no lo saltes)
+
+- El routine cloud **solo escribe texto** (`content/pending-draft.json`) y
+  pushea — no debería fallar casi nunca. Si el push falla, reintentar UNA vez;
+  si vuelve a fallar, avisar por Telegram y terminar sin insistir más.
+- La generación real (Gemini, en GitHub Actions vía `generate-queue.yml`) ya
+  tiene su propio manejo: si la sesión de Gemini caducó (`generate-cloud.mjs`
+  sale con exit code 2), el workflow debe fallar visiblemente en Actions y
+  quien lo note debe re-exportar la sesión (`npm run chrome` +
+  `node scripts/export-gemini-session.mjs` + `gh secret set
+  GEMINI_SESSION_STATE`). No hay fallback automático a HighsField/Canva en
+  este flujo — si Gemini falla, ese post simplemente no se genera esa corrida
+  (mejor eso que publicar algo a medias); `publish-queue.mjs` ya cae solo a la
+  rotación vieja si la queue queda vacía.
 
 ## Qué NO hacer
 
 - No repetir el mismo ángulo/tipo dos corridas seguidas.
 - No inventar cifras/testimonios como si fueran reales sin dejarlo claro que son
   ilustrativos.
-- No saltarse el paso de Telegram — todo pasa por `generate-content.mjs`, nunca
-  se llama a `graph.mjs` directo desde el agente generador.
+- No generar imágenes ni llamar ninguna MCP tool de imagen desde el routine
+  cloud — solo escribe `content/pending-draft.json` y pushea. La generación
+  real la hace GitHub Actions (`generate-queue.yml`), no el routine.
