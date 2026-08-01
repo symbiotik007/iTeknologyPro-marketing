@@ -22,7 +22,7 @@ import { chromium } from "playwright";
 import { readFile, writeFile, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { askGeminiForImage, saveDataUrl, toJpeg1080 } from "./lib/gemini.mjs";
+import { askGeminiForImage, toJpeg1080 } from "./lib/gemini.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -72,10 +72,9 @@ async function main() {
       console.log(`\n▶ [${n}] ${prompts[i].slice(0, 60)}...`);
       const page = await context.newPage();
       try {
-        const dataUrl = await askGeminiForImage(page, prompts[i]);
-        if (!dataUrl) throw new Error("No apareció imagen dentro del tiempo límite.");
         const raw = path.join(TMP_DIR, `raw-${n}.png`);
-        await saveDataUrl(dataUrl, raw);
+        const saved = await askGeminiForImage(page, prompts[i], raw);
+        if (!saved) throw new Error("No apareció imagen dentro del tiempo límite.");
         const out = path.join(outDir, `${n}.jpg`);
         toJpeg1080(raw, out);
         console.log(`  ✓ guardada: ${out}`);

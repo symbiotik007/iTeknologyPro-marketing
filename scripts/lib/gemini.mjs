@@ -68,31 +68,41 @@ export async function firstVisible(page, selectors) {
 
 // Espera la imagen generada y la extrae vía canvas (sin fetch: los blob de Gemini
 // no se dejan re-fetchear, pero el <img> ya cargado sí se lee por canvas).
-export async function grabImageDataUrl(page) {
-  const start = Date.now();
-  while (Date.now() - start < IMG_TIMEOUT_MS) {
-    const data = await page.evaluate(() => {
-      const imgs = Array.from(document.querySelectorAll("img"))
-        .filter((im) => im.naturalWidth >= 512 && im.naturalHeight >= 512)
-        .filter((im) => !/gstatic|sparkle|avatar|profile|logo/i.test(im.src + " " + (im.alt || "")));
-      imgs.sort((a, b) =>
-        (/generat/i.test(b.alt) ? 1 : 0) - (/generat/i.test(a.alt) ? 1 : 0) ||
-        b.naturalWidth * b.naturalHeight - a.naturalWidth * a.naturalHeight
-      );
-      const img = imgs[0];
-      if (!img) return null;
+// Escucha las respuestas de red de la página y guarda en outPath la primera
+// imagen "grande" (> 30KB, no ícono/avatar) que llegue — son los bytes
+// EXACTOS del archivo generado, sin pasar por canvas/fetch de JS ni por
+// screenshot del DOM (evita CORS, "tainted canvas", y capturar de más la UI
+// de Gemini alrededor de la imagen).
+export function watchForGeneratedImage(page, outPath) {
+  return new Promise((resolve) => {
+    let done = false;
+    const timer = setTimeout(() => {
+      if (!done) { done = true; page.off("response", onResponse); resolve(null); }
+    }, IMG_TIMEOUT_MS);
+
+    async function onResponse(response) {
+      if (done) return;
+      const url = response.url();
+      if (/gstatic|favicon|avatar|profile|sparkle/i.test(url)) return;
+      const headers = response.headers();
+      const contentType = headers["content-type"] || "";
+      if (!contentType.startsWith("image/")) return;
       try {
-        const c = document.createElement("canvas");
-        c.width = img.naturalWidth; c.height = img.naturalHeight;
-        c.getContext("2d").drawImage(img, 0, 0);
-        return c.toDataURL("image/png");
-      } catch (e) { return "ERR:" + e.message; }
-    });
-    if (data && data.startsWith("data:")) return data;
-    if (data && data.startsWith("ERR:")) console.log("  canvas:", data.slice(0, 80));
-    await sleep(2500);
-  }
-  return null;
+        const body = await response.body();
+        if (body.length < 30_000) return; // ícono/thumbnail chico, no es la imagen generada
+        done = true;
+        clearTimeout(timer);
+        page.off("response", onResponse);
+        const { writeFile } = await import("node:fs/promises");
+        await writeFile(outPath, body);
+        resolve(outPath);
+      } catch {
+        // respuesta ya consumida/inaccesible, seguir esperando otra
+      }
+    }
+
+    page.on("response", onResponse);
+  });
 }
 
 // Detecta si la sesión sigue logueada (vs. pantalla de "Iniciar sesión"). Se usa
@@ -112,9 +122,9 @@ export async function isLoggedIn(page) {
   }
 }
 
-// Manda un prompt a una pestaña de Gemini ya abierta y devuelve el dataURL de
-// la imagen generada (o null si no apareció a tiempo).
-export async function askGeminiForImage(page, prompt) {
+// Manda un prompt a una pestaña de Gemini ya abierta y guarda la imagen
+// generada en outPath (PNG). Devuelve outPath, o null si no apareció a tiempo.
+export async function askGeminiForImage(page, prompt, outPath) {
   await page.goto(GEMINI_URL, { waitUntil: "domcontentloaded" });
   await sleep(3000);
 
@@ -134,6 +144,10 @@ export async function askGeminiForImage(page, prompt) {
 
   const input = await firstVisible(page, INPUT_SELECTORS);
   if (!input) throw new Error("No encontré el campo de texto de Gemini (revisar selectores).");
+
+  // Adjuntar el listener de red ANTES de enviar, para no perder la respuesta.
+  const imagePromise = watchForGeneratedImage(page, outPath);
+
   await input.click();
   await input.fill(prompt).catch(async () => { await page.keyboard.insertText(prompt); });
   await sleep(500);
@@ -141,5 +155,5 @@ export async function askGeminiForImage(page, prompt) {
   const send = await firstVisible(page, SEND_SELECTORS);
   if (send) await send.click(); else await page.keyboard.press("Enter");
 
-  return grabImageDataUrl(page);
+  return imagePromise;
 }

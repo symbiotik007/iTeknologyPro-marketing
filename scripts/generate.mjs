@@ -19,17 +19,7 @@ import { chromium } from "playwright";
 import { readFile, writeFile, readdir, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  GEMINI_URL,
-  sleep,
-  parseVault,
-  saveDataUrl,
-  toJpeg1080,
-  firstVisible,
-  grabImageDataUrl,
-  INPUT_SELECTORS,
-  SEND_SELECTORS,
-} from "./lib/gemini.mjs";
+import { parseVault, toJpeg1080, askGeminiForImage } from "./lib/gemini.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -76,24 +66,10 @@ async function main() {
     console.log(`\n▶ [${String(idx).padStart(2, "0")}] ${block.title}`);
     const page = await context.newPage();
     try {
-      await page.goto(GEMINI_URL, { waitUntil: "domcontentloaded" });
-      await sleep(3000);
-
-      const input = await firstVisible(page, INPUT_SELECTORS);
-      if (!input) throw new Error("No encontré el campo de texto de Gemini (revisar selectores).");
-      await input.click();
-      await input.fill(block.prompt).catch(async () => { await page.keyboard.insertText(block.prompt); });
-      await sleep(500);
-
-      const send = await firstVisible(page, SEND_SELECTORS);
-      if (send) await send.click(); else await page.keyboard.press("Enter");
-      console.log("  prompt enviado, esperando imagen…");
-
-      const dataUrl = await grabImageDataUrl(page);
-      if (!dataUrl) throw new Error("No apareció imagen dentro del tiempo límite.");
-
       const raw = path.join(RAW_DIR, `${String(idx).padStart(2, "0")}.png`);
-      await saveDataUrl(dataUrl, raw);
+      const saved = await askGeminiForImage(page, block.prompt, raw);
+      if (!saved) throw new Error("No apareció imagen dentro del tiempo límite.");
+
       const out = path.join(IMAGES_DIR, `${String(idx).padStart(2, "0")}.jpg`);
       toJpeg1080(raw, out);
       console.log(`  ✓ guardada: content/images/${path.basename(out)}`);
