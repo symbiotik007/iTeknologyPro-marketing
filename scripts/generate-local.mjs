@@ -38,6 +38,7 @@ const CAROUSEL_BANK_FILE = path.join(ROOT, "content", "carousels", "content-bank
 const STATE_FILE = path.join(ROOT, "content", "generator-state.json");
 const TMP_OUT = path.join(ROOT, ".gen-tmp", "local-run");
 const SESSION_FILE = path.join(ROOT, ".gen-tmp", "gemini-storage-state.json");
+const SITE_URL = "https://iteknology.co/onboarding";
 
 // Genera la ilustración vía Gemini (sesión local exportada). Si falla por
 // cualquier razón (sesión caducada, timeout, etc.) devuelve null — el
@@ -109,7 +110,7 @@ async function main() {
 
     await renderFeatureHighlight({ ...entry, illustrationPath }, out);
     assets = [out];
-    caption = `${entry.headline.text}\n\n${entry.subtitle}\n\n${entry.cta}\n\n#iTeknology #TiendaOnline #SinCodigo`;
+    caption = `${entry.headline.text}\n\n${entry.subtitle}\n\n${entry.cta} 👉 ${SITE_URL}\n\n#iTeknology #TiendaOnline #SinCodigo`;
     state.singleIndex = (state.singleIndex || 0) + 1;
   } else {
     // Formato B2 aprobado: Hook (imagen) -> Problema (imagen) -> Consecuencia
@@ -145,7 +146,7 @@ async function main() {
     assets = paths;
     caption = `${entry.captionHook}\n\n` +
       `En iTeknology ayudamos a recuperar el control de tu negocio: app propia, logística inteligente y gestión de pedidos unificada.\n\n` +
-      `${entry.resultCta.ctaButton} 🔗 Link en bio.\n\n` +
+      `${entry.resultCta.ctaButton} 👉 ${SITE_URL}\n\n` +
       `${entry.hashtags}`;
     state.carouselIndex = (state.carouselIndex || 0) + 1;
   }
