@@ -1,0 +1,11 @@
+{
+  "id": "single-20260802T180648Z",
+  "type": "single",
+  "targets": [
+    "fb",
+    "ig"
+  ],
+  "createdAt": "2026-08-02T18:06:48.178Z",
+  "status": "pending",
+  "telegramMessageId": null
+}
