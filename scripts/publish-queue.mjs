@@ -174,7 +174,12 @@ async function main() {
     if (decision?.decision === "reject") {
       console.log("  ❌ Rechazado por Telegram.");
       if (!DRY) {
-        await answerCallbackQuery(decision.callbackQueryId, "Cancelado");
+        // answerCallbackQuery es solo cosmético (quita el spinner del botón).
+        // Si el click ya expiró (Telegram lo vence rápido), esto falla con
+        // "query is too old" -- nunca debe tumbar la publicación real.
+        await answerCallbackQuery(decision.callbackQueryId, "Cancelado").catch((e) =>
+          console.log(`  (answerCallbackQuery: ${e.message})`)
+        );
         await sendMessage(`❌ Cancelado: ${item.meta.id}`);
         await moveToPublished(item, "rejected", null);
         changed = true;
@@ -184,7 +189,11 @@ async function main() {
 
     if (decision?.decision === "approve") {
       console.log("  ✅ Aprobado por Telegram, publicando…");
-      if (!DRY) await answerCallbackQuery(decision.callbackQueryId, "Publicando…");
+      if (!DRY) {
+        await answerCallbackQuery(decision.callbackQueryId, "Publicando…").catch((e) =>
+          console.log(`  (answerCallbackQuery: ${e.message})`)
+        );
+      }
     } else {
       console.log("  ⏱ Sin respuesta, publicando de todas formas (ventana vencida)…");
     }
