@@ -1,0 +1,16 @@
+{
+  "id": "single-20260802T222812Z",
+  "type": "single",
+  "targets": [
+    "fb",
+    "ig"
+  ],
+  "createdAt": "2026-08-02T22:28:12.181Z",
+  "status": "published",
+  "telegramMessageId": 795,
+  "results": {
+    "fb": "1281288388394495_122101050993418511",
+    "ig": "18068637734466718"
+  },
+  "decidedAt": "2026-08-02T22:38:04.468Z"
+}
