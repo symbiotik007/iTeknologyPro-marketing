@@ -71,7 +71,7 @@ Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, minimalista,
 
 ## B. Catálogo · productos · modificadores · IA · CSV
 
-### 11. Sube tu catálogo completo
+### 11. Sube tu catálogo completo -USED → 01.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, premium, sin emojis. Una cuadrícula ordenada de productos con fotos y precios en un smartphone. Titular: "TU CATÁLOGO COMPLETO EN LÍNEA". Subtítulo: "Fotos, precios y descripciones." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
