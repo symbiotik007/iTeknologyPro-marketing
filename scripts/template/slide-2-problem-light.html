@@ -6,62 +6,35 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body {
     width: 1080px; height: 1080px;
-    background: #F7F9FC;
+    background: #FAFBFF;
     font-family: "Segoe UI", Arial, sans-serif;
     overflow: hidden;
     position: relative;
   }
-  .eyebrow {
-    position: absolute;
-    top: 90px; left: 90px;
-    color: #2563EB;
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: 2px;
-  }
-  .title {
-    position: absolute;
-    top: 140px; left: 90px; right: 90px;
-    color: #0B1024;
-    font-size: 56px;
-    font-weight: 800;
-    line-height: 1.15;
-  }
-  .list {
-    position: absolute;
-    top: 380px; left: 90px; right: 90px;
-    display: flex;
-    flex-direction: column;
-    gap: 34px;
-  }
-  .item {
-    display: flex;
-    align-items: flex-start;
-    gap: 24px;
-    background: #ffffff;
-    border: 1px solid #E4E9F5;
-    box-shadow: 0 4px 14px rgba(11,16,36,0.06);
-    border-radius: 20px;
-    padding: 28px 32px;
-  }
-  .item svg { width: 40px; height: 40px; flex-shrink: 0; margin-top: 4px; }
-  .item span {
-    color: #2B3352;
-    font-size: 34px;
-    font-weight: 500;
-    line-height: 1.3;
-  }
-  .logo {
-    position: absolute;
-    bottom: 60px; right: 90px;
-    width: 70px; height: 70px;
-    border-radius: 50%;
-  }
+  .eyebrow { position: absolute; top: 70px; left: 80px; color: #2563EB; font-size: 24px; font-weight: 700; letter-spacing: 2px; }
+  .title { position: absolute; top: 112px; left: 80px; right: 80px; color: #0B1024; font-size: 48px; font-weight: 800; line-height: 1.16; }
+
+  .mockup-stage { position: absolute; top: 250px; left: 50%; transform: translateX(-50%); width: 620px; height: 340px; }
+  .mockup-shadow { position: absolute; inset: 20px 26px -8px 26px; background: radial-gradient(ellipse at center, rgba(11,16,36,0.10) 0%, transparent 70%); filter: blur(18px); }
+  .mockup-card { position: absolute; inset: 0; background: #ffffff; border-radius: 24px; box-shadow: 0 20px 44px -16px rgba(11,16,36,0.20), 0 0 0 1px rgba(11,16,36,0.05); overflow: hidden; }
+  .mockup-card img { width: 100%; height: 100%; object-fit: cover; }
+
+  .list { position: absolute; top: 650px; left: 80px; right: 80px; display: flex; flex-direction: column; gap: 18px; }
+  .item { display: flex; align-items: center; gap: 18px; }
+  .bullet { width: 12px; height: 12px; border-radius: 50%; background: #2563EB; flex-shrink: 0; }
+  .item span { color: #2B3352; font-size: 30px; font-weight: 600; line-height: 1.25; }
+  .logo { position: absolute; bottom: 55px; right: 80px; height: 26px; opacity: 0.9; }
 </style>
 </head>
 <body>
-  <div class="eyebrow">EL PROBLEMA</div>
+  <div class="eyebrow">EYEBROW_TEXT</div>
   <div class="title">TITLE_HTML</div>
+
+  <div class="mockup-stage">
+    <div class="mockup-shadow"></div>
+    <div class="mockup-card">ILLUSTRATION_IMG</div>
+  </div>
+
   <div class="list">
     ITEMS_HTML
   </div>

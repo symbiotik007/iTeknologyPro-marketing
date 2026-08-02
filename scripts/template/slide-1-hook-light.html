@@ -6,62 +6,45 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body {
     width: 1080px; height: 1080px;
-    background: #ffffff;
+    background: #FAFBFF;
     font-family: "Segoe UI", Arial, sans-serif;
     overflow: hidden;
     position: relative;
   }
-  .dots {
-    position: absolute;
-    width: 140px; height: 140px;
-    background-image: radial-gradient(circle, rgba(37,99,235,0.25) 2.5px, transparent 2.5px);
-    background-size: 24px 24px;
-  }
-  .dots.tl { top: 56px; left: 56px; }
-
+  .wave { position: absolute; top: 0; left: 0; right: 0; height: 8px; background: BADGE_WAVE; }
   .badge {
-    position: absolute;
-    top: 90px; left: 90px;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.35);
-    color: #DC2626;
-    font-size: 26px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 12px 28px;
-    border-radius: 100px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    position: absolute; top: 70px; left: 80px;
+    background: BADGE_BG; border: 1px solid BADGE_BORDER;
+    color: BADGE_COLOR; font-size: 24px; font-weight: 700; letter-spacing: 1px;
+    padding: 10px 24px; border-radius: 100px;
+    display: flex; align-items: center; gap: 10px;
   }
-  .badge svg { width: 28px; height: 28px; }
+  .badge svg { width: 24px; height: 24px; }
+  .headline {
+    position: absolute; top: 140px; left: 80px; right: 80px;
+    color: #0B1024; font-size: 58px; font-weight: 800; line-height: 1.14; letter-spacing: -0.5px;
+  }
+  .headline .accent { color: #2563EB; }
 
-  .hook {
-    position: absolute;
-    top: 340px; left: 90px; right: 90px;
-    color: #0B1024;
-    font-size: 82px;
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -1px;
-  }
-  .hook .accent { color: #2563EB; }
+  .mockup-stage { position: absolute; top: 380px; left: 50%; transform: translateX(-50%); width: 800px; height: 460px; }
+  .mockup-shadow { position: absolute; inset: 24px 30px -10px 30px; background: radial-gradient(ellipse at center, rgba(37,99,235,0.18) 0%, transparent 70%); filter: blur(20px); }
+  .mockup-card { position: absolute; inset: 0; background: #ffffff; border-radius: 28px; box-shadow: 0 24px 50px -18px rgba(11,16,36,0.20), 0 0 0 1px rgba(37,99,235,0.06); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .mockup-card img { width: 100%; height: 100%; object-fit: cover; }
+  .mockup-card svg { width: 260px; height: 260px; }
 
-  .logo {
-    position: absolute;
-    bottom: 70px; right: 90px;
-    width: 90px; height: 90px;
-    border-radius: 50%;
-  }
+  .logo { position: absolute; bottom: 60px; left: 80px; height: 30px; }
+  .swipe { position: absolute; bottom: 68px; right: 80px; color: #5B6685; font-size: 22px; font-weight: 600; }
 </style>
 </head>
 <body>
-  <div class="dots tl"></div>
-  <div class="badge">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l10 18H2L12 3z" stroke="#DC2626" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v5M12 18h.01" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>
-    BADGE_TEXT
+  <div class="wave"></div>
+  <div class="badge">BADGE_ICON BADGE_TEXT</div>
+  <div class="headline">HOOK_HTML</div>
+  <div class="mockup-stage">
+    <div class="mockup-shadow"></div>
+    <div class="mockup-card">ILLUSTRATION_IMG</div>
   </div>
-  <div class="hook">HOOK_HTML</div>
   <img class="logo" src="LOGO_DATA_URI" />
+  <div class="swipe">Desliza →</div>
 </body>
 </html>

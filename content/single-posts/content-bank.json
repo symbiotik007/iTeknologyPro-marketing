@@ -1,0 +1,44 @@
+[
+  {
+    "headline": { "text": "Smart Dispatching en segundos", "accent": "Smart Dispatching" },
+    "subtitle": "Asigna repartidores automáticamente, sin perder tiempo.",
+    "cta": "Agenda tu Demo →",
+    "icon": "dispatch",
+    "illustrationPrompt": "Ilustracion flat digital vibrante de un mapa de ciudad visto desde arriba con iconos de repartidores en moto y rutas de entrega trazadas en linea punteada, estilo moderno minimalista, paleta azul electrico #2563eb y celeste con acentos suaves, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
+  },
+  {
+    "headline": { "text": "Tu tienda online en minutos", "accent": "en minutos" },
+    "subtitle": "Catálogo, pedidos y pagos, listos hoy.",
+    "cta": "Crea tu tienda gratis",
+    "icon": "store",
+    "illustrationPrompt": "Ilustracion flat digital vibrante de un escaparate de tienda online con productos flotando en tarjetas alrededor, estilo moderno minimalista, paleta azul electrico #2563eb y blanco con acentos suaves, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
+  },
+  {
+    "headline": { "text": "Edita precios y fotos en segundos", "accent": "en segundos" },
+    "subtitle": "Tú tienes el control total.",
+    "cta": "Crea tu tienda gratis",
+    "icon": "checkout",
+    "illustrationPrompt": "Ilustracion flat digital vibrante de una pantalla de celular mostrando un editor de producto: un campo de precio y una foto de producto siendo editada, cursor tocando la pantalla, estilo moderno minimalista, paleta azul electrico #2563eb y blanco con acentos suaves, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
+  },
+  {
+    "headline": { "text": "Todo tu negocio en un panel", "accent": "un panel" },
+    "subtitle": "Pedidos web, app y POS unificados.",
+    "cta": "Agenda tu Demo →",
+    "icon": "dashboard",
+    "illustrationPrompt": "Ilustracion flat digital vibrante de un panel de control con graficas, tarjetas de pedidos y notificaciones flotando alrededor de una laptop, estilo moderno minimalista, paleta azul electrico #2563eb y blanco con acentos suaves, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
+  },
+  {
+    "headline": { "text": "Vende 24/7, sin descansar", "accent": "24/7" },
+    "subtitle": "Deja de perder ventas cuando duermes.",
+    "cta": "Crea tu tienda gratis",
+    "icon": "clock",
+    "illustrationPrompt": "Ilustracion flat digital vibrante de un celular con una notificacion de venta nueva de noche, luna y estrellas sutiles de fondo, estilo moderno minimalista, paleta azul electrico #2563eb y morado suave con acentos, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
+  },
+  {
+    "headline": { "text": "Haz crecer tu negocio hoy", "accent": "hoy" },
+    "subtitle": "El mejor momento para empezar es ahora.",
+    "cta": "Crea tu tienda gratis",
+    "icon": "growth",
+    "illustrationPrompt": "Ilustracion flat digital vibrante de una grafica de barras y una flecha ascendente con monedas y elementos de crecimiento flotando alrededor, estilo moderno minimalista, paleta azul electrico #2563eb y verde suave con acentos, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
+  }
+]

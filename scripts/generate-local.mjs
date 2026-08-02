@@ -25,15 +25,16 @@ import {
   renderFeatureHighlight,
   renderHook,
   renderProblem,
+  renderConsequence,
   renderSolution,
-  renderSocialProof,
   renderCtaFinal,
 } from "./lib/render-template.mjs";
 import { push as gitPush, commit as gitCommit } from "./lib/git.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const BANK_FILE = path.join(ROOT, "content", "content-bank.json");
+const SINGLE_BANK_FILE = path.join(ROOT, "content", "single-posts", "content-bank.json");
+const CAROUSEL_BANK_FILE = path.join(ROOT, "content", "carousels", "content-bank.json");
 const STATE_FILE = path.join(ROOT, "content", "generator-state.json");
 const TMP_OUT = path.join(ROOT, ".gen-tmp", "local-run");
 const SESSION_FILE = path.join(ROOT, ".gen-tmp", "gemini-storage-state.json");
@@ -79,7 +80,8 @@ function git(...args) {
 async function main() {
   const forcedType = process.argv[2];
 
-  const bank = await readJson(BANK_FILE, { single: [], carousel: [] });
+  const singleBank = await readJson(SINGLE_BANK_FILE, []);
+  const carouselBank = await readJson(CAROUSEL_BANK_FILE, []);
   const state = await readJson(STATE_FILE, {
     lastType: null,
     singleIndex: 0,
@@ -88,15 +90,15 @@ async function main() {
 
   const type = forcedType || (state.lastType === "single" ? "carousel" : "single");
 
-  if (type === "single" && bank.single.length === 0) throw new Error("content-bank.json sin entradas 'single'");
-  if (type === "carousel" && bank.carousel.length === 0) throw new Error("content-bank.json sin entradas 'carousel'");
+  if (type === "single" && singleBank.length === 0) throw new Error("content/single-posts/content-bank.json vacío");
+  if (type === "carousel" && carouselBank.length === 0) throw new Error("content/carousels/content-bank.json vacío");
 
   await mkdir(TMP_OUT, { recursive: true });
 
   let caption, assets;
 
   if (type === "single") {
-    const entry = bank.single[(state.singleIndex || 0) % bank.single.length];
+    const entry = singleBank[(state.singleIndex || 0) % singleBank.length];
     const out = path.join(TMP_OUT, "01.jpg");
 
     let illustrationPath = null;
@@ -110,7 +112,9 @@ async function main() {
     caption = `${entry.headline.text}\n\n${entry.subtitle}\n\n${entry.cta}\n\n#iTeknology #TiendaOnline #SinCodigo`;
     state.singleIndex = (state.singleIndex || 0) + 1;
   } else {
-    const entry = bank.carousel[(state.carouselIndex || 0) % bank.carousel.length];
+    // Formato B2 aprobado: Hook (imagen) -> Problema (imagen) -> Consecuencia
+    // (texto, sin imagen) -> Solución (imagen) -> Resultado+CTA (imagen).
+    const entry = carouselBank[(state.carouselIndex || 0) % carouselBank.length];
     const paths = [
       path.join(TMP_OUT, "01.jpg"),
       path.join(TMP_OUT, "02.jpg"),
@@ -118,17 +122,31 @@ async function main() {
       path.join(TMP_OUT, "04.jpg"),
       path.join(TMP_OUT, "05.jpg"),
     ];
-    await renderHook(entry.hook, paths[0]);
-    await renderProblem(entry.problem, paths[1]);
-    await renderSolution(entry.solution, paths[2]);
-    await renderSocialProof(entry.socialProof, paths[3]);
-    await renderCtaFinal(entry.ctaFinal, paths[4]);
+
+    async function illustrationFor(prompt, name) {
+      if (!prompt) return null;
+      return tryGenerateIllustration(prompt, path.join(TMP_OUT, `illustration-${name}.png`));
+    }
+
+    const hookIllustration = await illustrationFor(entry.hook.illustrationPrompt, "hook");
+    await renderHook({ ...entry.hook, illustrationPath: hookIllustration }, paths[0]);
+
+    const problemIllustration = await illustrationFor(entry.problem.illustrationPrompt, "problem");
+    await renderProblem({ ...entry.problem, illustrationPath: problemIllustration }, paths[1]);
+
+    await renderConsequence(entry.consequence, paths[2]);
+
+    const solutionIllustration = await illustrationFor(entry.solution.illustrationPrompt, "solution");
+    await renderSolution({ ...entry.solution, illustrationPath: solutionIllustration }, paths[3]);
+
+    const resultCtaIllustration = await illustrationFor(entry.resultCta.illustrationPrompt, "resultcta");
+    await renderCtaFinal({ ...entry.resultCta, illustrationPath: resultCtaIllustration }, paths[4]);
+
     assets = paths;
-    caption =
-      `${entry.hook.hook.text}\n\n` +
+    caption = `${entry.captionHook}\n\n` +
       `En iTeknology ayudamos a recuperar el control de tu negocio: app propia, logística inteligente y gestión de pedidos unificada.\n\n` +
-      `${entry.ctaFinal.ctaButton} 🔗 Link en bio.\n\n` +
-      `#RestaurantTech #FoodTech #DeliveryTech #B2BSaaS #iTeknology`;
+      `${entry.resultCta.ctaButton} 🔗 Link en bio.\n\n` +
+      `${entry.hashtags}`;
     state.carouselIndex = (state.carouselIndex || 0) + 1;
   }
 

@@ -112,30 +112,46 @@ scripts/generate-local.mjs           genera un post (template + content-bank.jso
                                       corre 2x/día vía Task Scheduler de Windows
 scripts/generate-content.mjs         arma un item de queue + notifica por Telegram
 scripts/publish-queue.mjs            revisa aprobación y publica (single/carrusel/reel)
-content/content-bank.json            banco de copy estructurado (rota single/carrusel)
-content/logoiTeknology.png           logo real, usado por el template
+content/single-posts/content-bank.json  banco de copy para posts single (rota)
+content/single-posts/previews/          ejemplos renderizados de referencia
+content/carousels/content-bank.json     banco de copy para carruseles (rota)
+content/carousels/previews/             ejemplos renderizados de referencia
+content/ugc/                            reservado para contenido UGC (futuro, vacío)
+content/logoiTeknology.png           logo real (badge circular), usado por el template
+content/logo iteknology largo.png    wordmark horizontal, usado en single-posts/hook
 content/copy.json                    banco de textos viejo (rota uno por día, fallback)
 content/images/                      imágenes viejas (rotación, fallback)
 content/state.json                   índice de rotación del fallback
-content/generator-state.json         índice de rotación de content-bank.json
+content/generator-state.json         índice de rotación de los content-bank.json
 content/queue/<id>/                  posts generados esperando aprobación/publicación
   meta.json                            { id, type: "single"|"carousel"|"reel", targets, status }
   caption.txt                          texto del post
   assets/                              imágenes (.jpg) o video.mp4 (si type=reel)
 content/published/<id>/              histórico de lo ya publicado (se mueve desde queue/)
+content/skipped-posts/<id>/          histórico de lo rechazado desde Telegram
 PROMPTS.md                           prompts viejos (Gemini/generate.mjs, ya no se usa
                                       para la automatización — queda para uso manual)
 .env.example                         plantilla para pruebas locales
 ```
 
-### Diseño: template real, no IA
+### Diseño: template real + ilustración Gemini (no genera el post completo)
 
-Las imágenes se arman con un template de código (HTML/CSS + Playwright), **no**
-con IA generativa — mismo layout, mismo logo, misma paleta cada vez, solo
-cambia el texto/ícono. Se probaron Canva (requiere plan pago) y Gemini (se
-desloguea si corre en la nube, o requiere Chrome local) antes de llegar a esto.
-Para agregar contenido nuevo: edita `content/content-bank.json` con más
-entradas `single`/`carousel`. Para ajustar el look: edita los HTML en
+Las imágenes se arman con un template de código (HTML/CSS + Playwright) —
+layout, logo, paleta y CTA siempre fijos. Lo único que varía por post es el
+texto y una **ilustración de Gemini** (sin logo/texto horneado) insertada en
+la caja del mockup — esto le da variedad visual real sin perder consistencia
+de marca. Se probaron Canva (requiere plan pago) y Gemini generando el post
+completo (se desloguea si corre en la nube) antes de llegar a este enfoque
+híbrido.
+
+**Formato de carrusel (aprobado 2026-08-02):** Hook (imagen) → Problema
+(imagen) → Consecuencia (texto, fondo oscuro, sin imagen — variación de ritmo
+deliberada) → Solución (imagen) → Resultado+CTA (imagen). El hook debe ser una
+promesa/curiosidad, nunca una pregunta directa sobre el problema — cada
+carrusel cuenta una historia real que iTeknology resuelve.
+
+Para agregar contenido nuevo: edita `content/single-posts/content-bank.json` o
+`content/carousels/content-bank.json`. Para ajustar el look: edita los HTML en
 `scripts/template/`.
 
 ## Después (cuando haya presupuesto / tiempo)

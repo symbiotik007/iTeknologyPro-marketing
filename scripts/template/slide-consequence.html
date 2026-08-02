@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1080px; height: 1080px;
+    background: #0B1024;
+    font-family: "Segoe UI", Arial, sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+  .eyebrow {
+    position: absolute; top: 90px; left: 80px;
+    color: #EF6B6B; font-size: 26px; font-weight: 700; letter-spacing: 2px;
+  }
+  .lines {
+    position: absolute;
+    top: 240px; left: 80px; right: 80px;
+    display: flex; flex-direction: column; gap: 30px;
+  }
+  .line {
+    color: #E7EAF5;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .line.final { color: #ffffff; font-weight: 800; }
+  .line .strike { color: #EF6B6B; }
+
+  .divider {
+    position: absolute;
+    top: 700px; left: 80px; width: 100px; height: 6px;
+    background: #2563EB; border-radius: 4px;
+  }
+  .payoff {
+    position: absolute;
+    top: 740px; left: 80px; right: 80px;
+    color: #9AA5C4;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .logo { position: absolute; bottom: 55px; right: 80px; height: 70px; opacity: 0.9; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">LA CONSECUENCIA</div>
+  <div class="lines">
+    LINES_HTML
+  </div>
+  <div class="divider"></div>
+  <div class="payoff">PAYOFF_TEXT</div>
+  <img class="logo" src="LOGO_DATA_URI" />
+</body>
+</html>

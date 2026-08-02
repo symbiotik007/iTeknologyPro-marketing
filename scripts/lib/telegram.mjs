@@ -12,11 +12,17 @@ function need(name) {
   return v;
 }
 
+// Timeout duro: sin esto, un fetch colgado (ej. Telegram tardando en traer
+// imágenes grandes desde raw.githubusercontent recién pusheadas) bloquea el
+// script entero indefinidamente en vez de fallar rápido y avisar.
+const TIMEOUT_MS = 30_000;
+
 async function call(token, method, params) {
   const res = await fetch(`${API(token)}/${method}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(params),
+    signal: AbortSignal.timeout(TIMEOUT_MS),
   });
   const json = await res.json();
   if (!json.ok) {
@@ -90,7 +96,8 @@ export async function sendCarouselPreview(imageUrls, caption, { replyMarkup } = 
 export async function getUpdates(offset) {
   const token = need("TELEGRAM_BOT_TOKEN");
   const res = await fetch(
-    `${API(token)}/getUpdates${offset != null ? `?offset=${offset}&timeout=0` : "?timeout=0"}`
+    `${API(token)}/getUpdates${offset != null ? `?offset=${offset}&timeout=0` : "?timeout=0"}`,
+    { signal: AbortSignal.timeout(TIMEOUT_MS) }
   );
   const json = await res.json();
   if (!json.ok) throw new Error(`Telegram getUpdates falló: ${JSON.stringify(json)}`);

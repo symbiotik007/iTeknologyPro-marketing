@@ -119,18 +119,32 @@ async function main() {
 
   const keyboard = approvalKeyboard(id);
   const previewCaption = `🆕 *${type.toUpperCase()}* — ${id}\n\n${caption}`;
-  let tgResult;
-  if (type === "single") {
-    tgResult = await sendPhoto(publicUrls[0], previewCaption, { replyMarkup: keyboard });
-  } else if (type === "reel") {
-    tgResult = await sendVideo(publicUrls[0], previewCaption, { replyMarkup: keyboard });
-  } else {
-    // carousel: preview de álbum + mensaje de botones aparte
-    const imgUrls = [];
-    for (let i = 0; i < assets.length; i++) {
-      imgUrls.push(rawUrl(`content/queue/${id}/assets/${String(i + 1).padStart(2, "0")}.jpg`));
+
+  async function sendPreview() {
+    if (type === "single") {
+      return sendPhoto(publicUrls[0], previewCaption, { replyMarkup: keyboard });
+    } else if (type === "reel") {
+      return sendVideo(publicUrls[0], previewCaption, { replyMarkup: keyboard });
+    } else {
+      // carousel: preview de álbum + mensaje de botones aparte
+      const imgUrls = [];
+      for (let i = 0; i < assets.length; i++) {
+        imgUrls.push(rawUrl(`content/queue/${id}/assets/${String(i + 1).padStart(2, "0")}.jpg`));
+      }
+      return sendCarouselPreview(imgUrls, previewCaption, { replyMarkup: keyboard });
     }
-    tgResult = await sendCarouselPreview(imgUrls, previewCaption, { replyMarkup: keyboard });
+  }
+
+  // Justo después del push, GitHub raw a veces tarda en servir el archivo
+  // recién subido — 1 reintento evita fallar por eso solo (el timeout de
+  // 30s en telegram.mjs ya evita que esto se cuelgue indefinidamente).
+  let tgResult;
+  try {
+    tgResult = await sendPreview();
+  } catch (err) {
+    console.log(`  Telegram falló (${err.message}), reintentando en 5s...`);
+    await new Promise((r) => setTimeout(r, 5000));
+    tgResult = await sendPreview();
   }
   console.log(`  Telegram enviado, message_id: ${tgResult.message_id}`);
 

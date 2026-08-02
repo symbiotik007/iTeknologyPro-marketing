@@ -1,0 +1,40 @@
+[
+  {
+    "hook": {
+      "badgeText": "CONTROL TOTAL",
+      "tone": "promise",
+      "hook": { "text": "Tu inventario debería trabajar por ti.", "accent": "trabajar por ti." },
+      "illustrationPrompt": "Ilustracion flat digital vibrante de cajas de inventario organizadas perfectamente en estanterias con un brillo azul suave de escaneo digital sobre ellas, sensacion de orden y control total, estilo moderno minimalista, paleta azul electrico #2563eb y celeste, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "problem": {
+      "eyebrow": "¿TE SUENA FAMILIAR?",
+      "title": "Así se ve tu día a día:",
+      "items": ["Cuentas el inventario a ojo", "Te enteras cuando el cliente ya está ahí", "No tienes tiempo de revisar estantes"],
+      "illustrationPrompt": "Ilustracion flat digital de un estante de tienda vacio con espacios sin productos y una etiqueta de precio caida, sensacion de desorden y falta de control, estilo moderno minimalista con lineas limpias, paleta gris azulado suave, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "consequence": {
+      "lines": [
+        { "text": "El cliente llegó." },
+        { "text": "Pidió el producto." },
+        { "text": "Ya no había.", "strike": true },
+        { "text": "Compró en otro lugar." }
+      ],
+      "payoff": "Cada venta perdida por falta de stock es un cliente que quizás no vuelva."
+    },
+    "solution": {
+      "title": "Así cambia tu negocio con iTeknology",
+      "items": ["Sabes en tiempo real qué tienes disponible", "El sistema te avisa antes de quedarte sin stock", "Cierras cada venta con confianza"],
+      "chipText": "Todo bajo control",
+      "illustrationPrompt": "Ilustracion flat digital de una pantalla de celular mostrando un dashboard de inventario limpio con barras verdes de stock disponible y un checkmark de confirmacion, estilo moderno minimalista, paleta azul electrico #2563eb y verde suave con acentos, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "resultCta": {
+      "result": "Nunca más pierdas una venta por no saber qué tienes disponible.",
+      "ctaHeadline": "Controla tu inventario desde hoy.",
+      "ctaButton": "Mira cómo funciona en 15 minutos",
+      "handle": "@iTeknology",
+      "illustrationPrompt": "Ilustracion flat digital vibrante de un dueno de negocio sonriente y confiado sosteniendo un celular con una grafica ascendente flotando junto a el, sensacion de exito y tranquilidad, estilo moderno minimalista, paleta azul electrico y blanco con acentos dorados suaves, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "captionHook": "Tu inventario debería trabajar por ti.",
+    "hashtags": "#RestaurantTech #RetailTech #B2BSaaS #iTeknology #GestionDeInventario"
+  }
+]
