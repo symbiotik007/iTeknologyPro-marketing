@@ -4,12 +4,21 @@ Banco de prompts para generar imágenes de posts, uno por funcionalidad real de 
 plataforma. Basado en los `programador.md` de los repos (admin, eCommerce, drivers)
 y sus MDs de features.
 
-**Reglas de cada imagen:**
-- Cuadrado **1080x1080** (o 2048 y el script lo baja). JPEG/PNG.
-- Marca **iTeknology**: azul **#2563eb** + blanco. Minimalista, **premium**, **sin emojis** (usa iconos/elementos de diseño).
-- CTA visible: botón azul **"Crea tu tienda gratis"** + logo iTeknology abajo.
-- Link real de los posts (va en el caption, no en la imagen): **https://t.co/phJghRDEoU**
-- Alta calidad, sin marcas de agua, tipografía sans-serif nítida.
+**[ACTUALIZADO] Reglas de cada imagen — ahora es solo la ILUSTRACIÓN, no el post completo:**
+- El template de código (`scripts/template/`) ya pone logo, headline, subtítulo y
+  botón CTA — **no se los pidas a Gemini**, o salen duplicados/chocan con el template.
+- Pide SOLO la escena/ilustración: qué se ve, qué acción, qué objeto — sin texto,
+  sin logo, sin marcas, sin botones dibujados.
+- Cuadrado o cualquier proporción (el template la recorta/ajusta a la caja).
+- Azul **#2563eb** + blanco como paleta sugerida (no obligatoria si la escena pide
+  otro color de acento), estilo flat/ilustración moderna, premium, sin emojis.
+- Alta calidad, sin marcas de agua, sin texto renderizado por la IA (los modelos
+  de imagen a veces meten letras random — pedir explícitamente "sin texto").
+
+Prompts viejos (abajo) todavía piden logo/headline/CTA horneado — quedan como
+referencia histórica, pero para el pipeline actual hay que reescribirlos sin
+esa parte antes de usarlos (o escribir uno nuevo directo en `content-bank.json`
+como `illustrationPrompt`).
 
 **Uso:** al generar con un prompt, añade el tag **`-USED`** al lado del título y el archivo (`→ NN.jpg`). Para el próximo lote toma los que NO tienen `-USED`.
 
@@ -76,12 +85,12 @@ Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, minimalista,
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, premium, sin emojis. Una cuadrícula ordenada de productos con fotos y precios en un smartphone. Titular: "TU CATÁLOGO COMPLETO EN LÍNEA". Subtítulo: "Fotos, precios y descripciones." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 12. Adicionales y sabores
+### 12. Adicionales y sabores -USED → 08.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, apetitoso pero minimalista, sin emojis. Un producto (hamburguesa) con opciones de adicionales y sabores marcadas con precios. Titular: "ADICIONALES Y SABORES". Subtítulo: "Deja que tu cliente arme su pedido." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 13. Precios y fotos por producto
+### 13. Precios y fotos por producto -USED → 09.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, editor limpio, sin emojis. Vista de edición de un producto con campos de precio y foto. Titular: "EDITA PRECIOS Y FOTOS EN SEGUNDOS". Subtítulo: "Tú tienes el control total." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```

@@ -52,17 +52,30 @@ function headlineHtml(headline) {
 // Renderiza el slide "Feature Highlight" (single, o 1 slide de carrusel).
 // opts: { headline, subtitle, cta, icon } — icon es una key de icons.mjs
 // (default rota si no se especifica).
+// opts.illustrationPath: ruta a una imagen (generada por Gemini u otra fuente,
+// SIN logo/texto/CTA horneado — solo la escena) para meter en la caja visual
+// en vez del ícono SVG genérico. Si no se da, usa el ícono como antes.
 export async function renderFeatureHighlight(opts, outPath) {
-  const { headline, subtitle, cta, icon, theme = DEFAULT_THEME } = opts;
-  const icons = iconSetFor(theme);
-  const iconKey = icon && icons[icon] ? icon : iconKeys[0];
+  const { headline, subtitle, cta, icon, theme = DEFAULT_THEME, illustrationPath } = opts;
+
+  let visualHtml;
+  if (illustrationPath) {
+    const buf = await readFile(illustrationPath);
+    const ext = path.extname(illustrationPath).slice(1) || "jpeg";
+    const dataUri = `data:image/${ext};base64,${buf.toString("base64")}`;
+    visualHtml = `<img src="${dataUri}" />`;
+  } else {
+    const icons = iconSetFor(theme);
+    const iconKey = icon && icons[icon] ? icon : iconKeys[0];
+    visualHtml = icons[iconKey];
+  }
 
   let html = await readFile(path.join(TEMPLATE_DIR, templateFileFor("feature-highlight", theme)), "utf8");
   html = html
     .replace("LOGO_DATA_URI", await logoDataUri())
     .replace("HEADLINE_HTML", headlineHtml(headline))
     .replace("SUBTITLE_TEXT", escapeHtml(subtitle))
-    .replace("ICON_SVG", icons[iconKey])
+    .replace("ICON_SVG", visualHtml)
     .replace("CTA_TEXT", escapeHtml(cta));
 
   const browser = await chromium.launch({ headless: true });

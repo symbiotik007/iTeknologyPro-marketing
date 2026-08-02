@@ -19,6 +19,8 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { chromium } from "playwright";
+import { askGeminiForImage } from "./lib/gemini.mjs";
 import {
   renderFeatureHighlight,
   renderHook,
@@ -34,6 +36,32 @@ const ROOT = path.resolve(__dirname, "..");
 const BANK_FILE = path.join(ROOT, "content", "content-bank.json");
 const STATE_FILE = path.join(ROOT, "content", "generator-state.json");
 const TMP_OUT = path.join(ROOT, ".gen-tmp", "local-run");
+const SESSION_FILE = path.join(ROOT, ".gen-tmp", "gemini-storage-state.json");
+
+// Genera la ilustración vía Gemini (sesión local exportada). Si falla por
+// cualquier razón (sesión caducada, timeout, etc.) devuelve null — el
+// llamador debe caer al ícono SVG fijo, nunca bloquear la corrida por esto.
+async function tryGenerateIllustration(prompt, outPath) {
+  let browser;
+  try {
+    await readFile(SESSION_FILE);
+  } catch {
+    console.log("  (sin sesión de Gemini exportada — uso ícono fijo)");
+    return null;
+  }
+  try {
+    browser = await chromium.launch({ headless: true });
+    const context = await browser.newContext({ storageState: SESSION_FILE });
+    const page = await context.newPage();
+    const result = await askGeminiForImage(page, prompt, outPath);
+    return result;
+  } catch (err) {
+    console.log(`  (ilustración Gemini falló: ${err.message} — uso ícono fijo)`);
+    return null;
+  } finally {
+    if (browser) await browser.close().catch(() => {});
+  }
+}
 
 async function readJson(file, fallback) {
   try {
@@ -70,7 +98,14 @@ async function main() {
   if (type === "single") {
     const entry = bank.single[(state.singleIndex || 0) % bank.single.length];
     const out = path.join(TMP_OUT, "01.jpg");
-    await renderFeatureHighlight(entry, out);
+
+    let illustrationPath = null;
+    if (entry.illustrationPrompt) {
+      const rawIllustration = path.join(TMP_OUT, "illustration.png");
+      illustrationPath = await tryGenerateIllustration(entry.illustrationPrompt, rawIllustration);
+    }
+
+    await renderFeatureHighlight({ ...entry, illustrationPath }, out);
     assets = [out];
     caption = `${entry.headline.text}\n\n${entry.subtitle}\n\n${entry.cta}\n\n#iTeknology #TiendaOnline #SinCodigo`;
     state.singleIndex = (state.singleIndex || 0) + 1;
