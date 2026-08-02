@@ -1,5 +1,6 @@
 {
-  "lastType": "single",
+  "lastType": "carousel",
   "index": 5,
-  "singleIndex": 1
+  "singleIndex": 1,
+  "carouselIndex": 1
 }
