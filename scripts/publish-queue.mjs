@@ -30,6 +30,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const QUEUE_DIR = path.join(ROOT, "content", "queue");
 const PUBLISHED_DIR = path.join(ROOT, "content", "published");
+const SKIPPED_DIR = path.join(ROOT, "content", "skipped-posts");
 const TG_STATE_FILE = path.join(ROOT, "content", "telegram-state.json");
 
 const DRY = process.env.DRY_RUN === "1";
@@ -119,10 +120,13 @@ async function publishItem(item, pageToken, pageId, igUserId) {
 
 async function moveToPublished(item, status, results) {
   const itemDir = path.join(QUEUE_DIR, item.dir);
-  const destDir = path.join(PUBLISHED_DIR, item.dir);
+  // Los rechazados van a content/skipped-posts/, no a published/ (ese queda
+  // solo para lo que sí se publicó de verdad).
+  const destBase = status === "rejected" ? SKIPPED_DIR : PUBLISHED_DIR;
+  const destDir = path.join(destBase, item.dir);
   const meta = { ...item.meta, status, results: results || null, decidedAt: new Date().toISOString() };
   await writeFile(path.join(itemDir, "meta.json"), JSON.stringify(meta, null, 2) + "\n");
-  await mkdir(PUBLISHED_DIR, { recursive: true });
+  await mkdir(destBase, { recursive: true });
   await rename(itemDir, destDir);
 }
 
@@ -202,7 +206,7 @@ async function main() {
 
   if (!DRY) {
     await writeFile(TG_STATE_FILE, JSON.stringify(tgState, null, 2) + "\n");
-    git("add", "content/queue", "content/published", "content/telegram-state.json");
+    git("add", "content/queue", "content/published", "content/skipped-posts", "content/telegram-state.json");
     const r = spawnSync(
       "git",
       ["-c", "user.name=iteknology-bot", "-c", "user.email=bot@iteknology.local", "commit", "-m", "chore: publish-queue [skip ci]"],
