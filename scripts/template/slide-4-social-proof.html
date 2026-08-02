@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1080px; height: 1080px;
+    background: #0B1024;
+    font-family: "Segoe UI", Arial, sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+  .quote-mark {
+    position: absolute;
+    top: 110px; left: 90px;
+    color: #2563EB;
+    font-size: 140px;
+    font-weight: 800;
+    line-height: 1;
+    font-family: Georgia, serif;
+  }
+  .quote {
+    position: absolute;
+    top: 250px; left: 90px; right: 90px;
+    color: #ffffff;
+    font-size: 46px;
+    font-weight: 600;
+    line-height: 1.35;
+    font-style: italic;
+  }
+  .stat-box {
+    position: absolute;
+    top: 610px; left: 90px; right: 90px;
+    background: linear-gradient(135deg, #2563EB, #1743A8);
+    border-radius: 28px;
+    padding: 50px;
+    text-align: center;
+  }
+  .stat-number {
+    color: #ffffff;
+    font-size: 96px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .stat-label {
+    color: #D7E3FF;
+    font-size: 30px;
+    font-weight: 500;
+    margin-top: 12px;
+  }
+  .source {
+    position: absolute;
+    bottom: 70px; left: 90px;
+    color: #7C8AB0;
+    font-size: 26px;
+    font-weight: 500;
+  }
+  .logo {
+    position: absolute;
+    bottom: 55px; right: 90px;
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    opacity: 0.85;
+  }
+</style>
+</head>
+<body>
+  <div class="quote-mark">"</div>
+  <div class="quote">QUOTE_HTML</div>
+  <div class="stat-box">
+    <div class="stat-number">STAT_NUMBER</div>
+    <div class="stat-label">STAT_LABEL</div>
+  </div>
+  <div class="source">SOURCE_TEXT</div>
+  <img class="logo" src="LOGO_DATA_URI" />
+</body>
+</html>

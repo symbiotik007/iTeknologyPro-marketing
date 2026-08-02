@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1080px; height: 1080px;
+    background: #05070f;
+    font-family: "Segoe UI", Arial, sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+  .dots {
+    position: absolute;
+    width: 140px; height: 140px;
+    background-image: radial-gradient(circle, rgba(90,130,255,0.35) 2.5px, transparent 2.5px);
+    background-size: 24px 24px;
+  }
+  .dots.tl { top: 56px; left: 56px; }
+
+  .badge {
+    position: absolute;
+    top: 90px; left: 90px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #FF6B6B;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 12px 28px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .badge svg { width: 28px; height: 28px; }
+
+  .hook {
+    position: absolute;
+    top: 340px; left: 90px; right: 90px;
+    color: #ffffff;
+    font-size: 82px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+  }
+  .hook .accent { color: #4F8CFF; }
+
+  .logo {
+    position: absolute;
+    bottom: 70px; right: 90px;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    opacity: 0.9;
+  }
+</style>
+</head>
+<body>
+  <div class="dots tl"></div>
+  <div class="badge">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l10 18H2L12 3z" stroke="#FF6B6B" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v5M12 18h.01" stroke="#FF6B6B" stroke-width="2" stroke-linecap="round"/></svg>
+    BADGE_TEXT
+  </div>
+  <div class="hook">HOOK_HTML</div>
+  <img class="logo" src="LOGO_DATA_URI" />
+</body>
+</html>

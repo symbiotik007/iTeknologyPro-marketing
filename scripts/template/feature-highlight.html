@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: "Inter";
+    src: local("Segoe UI");
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1080px; height: 1080px;
+    background: #05070f;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* patrón de puntos decorativo, sutil, esquinas */
+  .dots {
+    position: absolute;
+    width: 140px; height: 140px;
+    background-image: radial-gradient(circle, rgba(90,130,255,0.35) 2.5px, transparent 2.5px);
+    background-size: 24px 24px;
+  }
+  .dots.tl { top: 56px; left: 56px; }
+  .dots.br { bottom: 56px; right: 56px; }
+
+  .logo {
+    position: absolute;
+    top: 56px; left: 50%;
+    transform: translateX(-50%);
+    width: 120px; height: 120px;
+    border-radius: 50%;
+  }
+
+  .content {
+    position: absolute;
+    top: 230px; left: 90px; right: 90px;
+    text-align: center;
+  }
+
+  .headline {
+    color: #ffffff;
+    font-size: 68px;
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.5px;
+  }
+  .headline .accent { color: #4F8CFF; }
+
+  .subtitle {
+    margin-top: 22px;
+    color: #A9B6D6;
+    font-size: 32px;
+    font-weight: 400;
+  }
+
+  .visual {
+    position: absolute;
+    top: 560px; left: 50%;
+    transform: translateX(-50%);
+    width: 620px; height: 340px;
+    background: linear-gradient(160deg, #0E1530 0%, #131C3E 100%);
+    border: 1px solid rgba(90,130,255,0.25);
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .visual svg { width: 260px; height: 260px; }
+
+  .cta {
+    position: absolute;
+    bottom: 90px; left: 50%;
+    transform: translateX(-50%);
+    background: #2563EB;
+    color: white;
+    font-size: 34px;
+    font-weight: 700;
+    padding: 24px 56px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+  <div class="dots tl"></div>
+  <div class="dots br"></div>
+
+  <img class="logo" src="LOGO_DATA_URI" />
+
+  <div class="content">
+    <div class="headline">HEADLINE_HTML</div>
+    <div class="subtitle">SUBTITLE_TEXT</div>
+  </div>
+
+  <div class="visual">
+    ICON_SVG
+  </div>
+
+  <div class="cta">CTA_TEXT</div>
+</body>
+</html>

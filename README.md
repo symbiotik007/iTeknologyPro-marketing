@@ -99,26 +99,44 @@ Listo. A partir de ahí publica solo, todos los días a las 9:00 a.m. Colombia.
 ```
 .github/workflows/post.yml           cron viejo (rotación simple, ahora solo manual)
 .github/workflows/publish-queue.yml  cron 2x/día: publica lo aprobado en content/queue/
+scripts/template/                    template real HTML/CSS (single + 5 slides carrusel)
+scripts/template/icons.mjs           set fijo de íconos SVG (sin IA)
+scripts/lib/render-template.mjs      renderiza el template a JPG 1080x1080 (Playwright)
+scripts/lib/git.mjs                  push confiable (bypassa Git Credential Manager)
 scripts/lib/graph.mjs                Graph API compartida (imagen, carrusel, reel)
 scripts/lib/telegram.mjs             bot de aprobación (botones Aprobar/Rechazar)
 scripts/lib/video.mjs                arma el reel (slideshow ffmpeg) desde N imágenes
 scripts/post.mjs                     publicación simple (rotación vieja, fallback)
+scripts/generate-local.mjs           genera un post (template + content-bank.json),
+                                      arma la queue, comitea+pushea, notifica Telegram —
+                                      corre 2x/día vía Task Scheduler de Windows
 scripts/generate-content.mjs         arma un item de queue + notifica por Telegram
 scripts/publish-queue.mjs            revisa aprobación y publica (single/carrusel/reel)
+content/content-bank.json            banco de copy estructurado (rota single/carrusel)
+content/logoiTeknology.png           logo real, usado por el template
 content/copy.json                    banco de textos viejo (rota uno por día, fallback)
 content/images/                      imágenes viejas (rotación, fallback)
 content/state.json                   índice de rotación del fallback
+content/generator-state.json         índice de rotación de content-bank.json
 content/queue/<id>/                  posts generados esperando aprobación/publicación
   meta.json                            { id, type: "single"|"carousel"|"reel", targets, status }
   caption.txt                          texto del post
   assets/                              imágenes (.jpg) o video.mp4 (si type=reel)
 content/published/<id>/              histórico de lo ya publicado (se mueve desde queue/)
-content/generator-brief.md           brief de marca/ángulos para el agente generador
-                                      (diseño vía Gemini/generate.mjs, no Canva —
-                                      Canva Brand Template requiere plan pago)
-PROMPTS.md                           prompts para generar las imágenes
+PROMPTS.md                           prompts viejos (Gemini/generate.mjs, ya no se usa
+                                      para la automatización — queda para uso manual)
 .env.example                         plantilla para pruebas locales
 ```
+
+### Diseño: template real, no IA
+
+Las imágenes se arman con un template de código (HTML/CSS + Playwright), **no**
+con IA generativa — mismo layout, mismo logo, misma paleta cada vez, solo
+cambia el texto/ícono. Se probaron Canva (requiere plan pago) y Gemini (se
+desloguea si corre en la nube, o requiere Chrome local) antes de llegar a esto.
+Para agregar contenido nuevo: edita `content/content-bank.json` con más
+entradas `single`/`carousel`. Para ajustar el look: edita los HTML en
+`scripts/template/`.
 
 ## Después (cuando haya presupuesto / tiempo)
 

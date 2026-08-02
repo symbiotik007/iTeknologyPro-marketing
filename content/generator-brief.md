@@ -1,4 +1,11 @@
-# Brief para el agente generador de contenido — iTeknology
+# [OBSOLETO] Brief para el agente generador de contenido — iTeknology
+
+> Este archivo describe el flujo viejo (routine cloud + Gemini/HighsField),
+> ya desactivado. El diseño ahora es 100% determinístico: template real en
+> `scripts/template/` + `scripts/lib/render-template.mjs`, contenido en
+> `content/content-bank.json`, todo corrido por `scripts/generate-local.mjs`
+> (Task Scheduler de Windows, 2x/día). Se deja este archivo como referencia
+> histórica de los ángulos/tono de marca, no como instrucciones activas.
 
 Este archivo lo lee el agente Claude programado (2x/día) antes de generar un post
 nuevo. Objetivo: decidir ángulo/tipo y escribir copy + prompts de imagen en

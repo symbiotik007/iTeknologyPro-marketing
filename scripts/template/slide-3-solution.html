@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1080px; height: 1080px;
+    background: #05070f;
+    font-family: "Segoe UI", Arial, sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+  .eyebrow {
+    position: absolute;
+    top: 90px; left: 90px;
+    color: #4F8CFF;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .title {
+    position: absolute;
+    top: 140px; left: 90px; right: 90px;
+    color: #ffffff;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.15;
+  }
+  .list {
+    position: absolute;
+    top: 380px; left: 90px; right: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+  .check {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: #2563EB;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .check svg { width: 24px; height: 24px; }
+  .item span {
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: 600;
+  }
+  .logo {
+    position: absolute;
+    bottom: 60px; right: 90px;
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    opacity: 0.85;
+  }
+</style>
+</head>
+<body>
+  <div class="eyebrow">LA SOLUCIÓN</div>
+  <div class="title">TITLE_HTML</div>
+  <div class="list">
+    ITEMS_HTML
+  </div>
+  <img class="logo" src="LOGO_DATA_URI" />
+</body>
+</html>

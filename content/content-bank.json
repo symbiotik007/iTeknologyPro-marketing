@@ -1,0 +1,56 @@
+{
+  "single": [
+    {
+      "headline": { "text": "Smart Dispatching en segundos", "accent": "Smart Dispatching" },
+      "subtitle": "Asigna repartidores automáticamente, sin perder tiempo.",
+      "cta": "Agenda tu Demo →",
+      "icon": "dispatch"
+    },
+    {
+      "headline": { "text": "Tu tienda online en minutos", "accent": "en minutos" },
+      "subtitle": "Catálogo, pedidos y pagos, listos hoy.",
+      "cta": "Crea tu tienda gratis",
+      "icon": "store"
+    },
+    {
+      "headline": { "text": "Checkout en un clic", "accent": "un clic" },
+      "subtitle": "Menos pasos, más ventas cerradas.",
+      "cta": "Agenda tu Demo →",
+      "icon": "checkout"
+    },
+    {
+      "headline": { "text": "Todo tu negocio en un panel", "accent": "un panel" },
+      "subtitle": "Pedidos web, app y POS unificados.",
+      "cta": "Agenda tu Demo →",
+      "icon": "dashboard"
+    },
+    {
+      "headline": { "text": "Vende 24/7, sin descansar", "accent": "24/7" },
+      "subtitle": "Deja de perder ventas cuando duermes.",
+      "cta": "Crea tu tienda gratis",
+      "icon": "clock"
+    },
+    {
+      "headline": { "text": "Haz crecer tu negocio hoy", "accent": "hoy" },
+      "subtitle": "El mejor momento para empezar es ahora.",
+      "cta": "Crea tu tienda gratis",
+      "icon": "growth"
+    }
+  ],
+  "carousel": [
+    {
+      "hook": { "badge": "ALERTA", "hook": { "text": "¿Cuánto margen estás regalando a las apps de delivery?", "accent": "regalando" } },
+      "problem": { "title": "Cada pedido de terceros te cuesta:", "items": ["20-30% de comisión por pedido", "Cero datos de tu cliente", "Cero control sobre tu marca"] },
+      "solution": { "title": "Con iTeknology recuperas tu vitrina digital:", "items": ["App propia con tu marca", "Dispatching inteligente", "Pedidos unificados en un panel"] },
+      "socialProof": { "quote": "Redujimos costos de delivery en 30% y ahora tenemos los datos de nuestros clientes.", "statNumber": "-30%", "statLabel": "en costos de delivery", "source": "Cliente iTeknology" },
+      "ctaFinal": { "ctaHeadline": "Deja de rentar tu negocio a terceros", "ctaButton": "Agenda tu Demo Gratis", "handle": "@iTeknology" }
+    },
+    {
+      "hook": { "badge": "REALIDAD", "hook": { "text": "Sigues tomando pedidos por WhatsApp a mano?", "accent": "a mano" } },
+      "problem": { "title": "Así se ve tu operación hoy:", "items": ["Pedidos perdidos en el chat", "Errores al anotar direcciones", "Cero reportes de ventas reales"] },
+      "solution": { "title": "iTeknology organiza todo por ti:", "items": ["Catálogo digital siempre actualizado", "Pedidos con dirección y pago listos", "Reportes de ventas en tiempo real"] },
+      "socialProof": { "quote": "Pasamos de anotar pedidos en un cuaderno a tener todo organizado en el celular.", "statNumber": "+40%", "statLabel": "más pedidos procesados por día", "source": "Cliente iTeknology" },
+      "ctaFinal": { "ctaHeadline": "Organiza tu negocio hoy mismo", "ctaButton": "Crea tu Tienda Gratis", "handle": "@iTeknology" }
+    }
+  ]
+}
