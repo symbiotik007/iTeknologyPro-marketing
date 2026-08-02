@@ -6,7 +6,10 @@ import { spawnSync } from "node:child_process";
 import { writeFile } from "node:fs/promises";
 
 export const GEMINI_URL = "https://gemini.google.com/app";
-export const IMG_TIMEOUT_MS = 180_000; // Gemini puede tardar en generar
+// Gemini a veces entra en modo "pensando" (ej. "Assessing the Visuals...")
+// antes de mostrar la imagen -- más lento que antes. 300s de margen +
+// clic automático en "Answer now" (ver askGeminiForImage) para acelerarlo.
+export const IMG_TIMEOUT_MS = 300_000;
 
 export const INPUT_SELECTORS = [
   'rich-textarea div[contenteditable="true"]',
@@ -66,43 +69,44 @@ export async function firstVisible(page, selectors) {
   return null;
 }
 
-// Espera la imagen generada y la extrae vía canvas (sin fetch: los blob de Gemini
-// no se dejan re-fetchear, pero el <img> ya cargado sí se lee por canvas).
-// Escucha las respuestas de red de la página y guarda en outPath la primera
-// imagen "grande" (> 30KB, no ícono/avatar) que llegue — son los bytes
-// EXACTOS del archivo generado, sin pasar por canvas/fetch de JS ni por
-// screenshot del DOM (evita CORS, "tainted canvas", y capturar de más la UI
-// de Gemini alrededor de la imagen).
-export function watchForGeneratedImage(page, outPath) {
-  return new Promise((resolve) => {
-    let done = false;
-    const timer = setTimeout(() => {
-      if (!done) { done = true; page.off("response", onResponse); resolve(null); }
-    }, IMG_TIMEOUT_MS);
+// Espera la imagen generada y la descarga vía el botón real de Gemini
+// ("Download full size image") usando el evento nativo `download` de
+// Playwright. Probamos antes espiar la red (respuestas image/*) y leer el
+// <img> por canvas/fetch -- ambos dejaron de funcionar cuando Gemini empezó a
+// entregar la imagen embebida (no como respuesta de red directa) en vez de
+// un archivo servido aparte. El botón de descarga sí es estable pase lo que
+// pase por dentro, así que es el método robusto de verdad.
+const DOWNLOAD_BTN_SELECTOR = 'button[aria-label="Download full size image"]';
+const ANSWER_NOW_SELECTOR = 'button:has-text("Answer now")';
 
-    async function onResponse(response) {
-      if (done) return;
-      const url = response.url();
-      if (/gstatic|favicon|avatar|profile|sparkle/i.test(url)) return;
-      const headers = response.headers();
-      const contentType = headers["content-type"] || "";
-      if (!contentType.startsWith("image/")) return;
-      try {
-        const body = await response.body();
-        if (body.length < 30_000) return; // ícono/thumbnail chico, no es la imagen generada
-        done = true;
-        clearTimeout(timer);
-        page.off("response", onResponse);
-        const { writeFile } = await import("node:fs/promises");
-        await writeFile(outPath, body);
-        resolve(outPath);
-      } catch {
-        // respuesta ya consumida/inaccesible, seguir esperando otra
+export async function watchForGeneratedImage(page, outPath) {
+  const start = Date.now();
+  while (Date.now() - start < IMG_TIMEOUT_MS) {
+    // Gemini a veces pide "Answer now" para saltar el modo "pensando".
+    try {
+      const answerBtn = page.locator(ANSWER_NOW_SELECTOR);
+      if ((await answerBtn.count()) && (await answerBtn.first().isVisible())) {
+        await answerBtn.first().click().catch(() => {});
       }
+    } catch {}
+
+    try {
+      const dlBtn = page.locator(DOWNLOAD_BTN_SELECTOR).last();
+      if ((await dlBtn.count()) && (await dlBtn.isVisible())) {
+        const [download] = await Promise.all([
+          page.waitForEvent("download", { timeout: 15_000 }),
+          dlBtn.click(),
+        ]);
+        await download.saveAs(outPath);
+        return outPath;
+      }
+    } catch {
+      // el botón desapareció/no disparó descarga esta vuelta, reintenta
     }
 
-    page.on("response", onResponse);
-  });
+    await sleep(3000);
+  }
+  return null;
 }
 
 // Detecta si la sesión sigue logueada (vs. pantalla de "Iniciar sesión"). Se usa
@@ -145,9 +149,6 @@ export async function askGeminiForImage(page, prompt, outPath) {
   const input = await firstVisible(page, INPUT_SELECTORS);
   if (!input) throw new Error("No encontré el campo de texto de Gemini (revisar selectores).");
 
-  // Adjuntar el listener de red ANTES de enviar, para no perder la respuesta.
-  const imagePromise = watchForGeneratedImage(page, outPath);
-
   await input.click();
   await input.fill(prompt).catch(async () => { await page.keyboard.insertText(prompt); });
   await sleep(500);
@@ -155,5 +156,5 @@ export async function askGeminiForImage(page, prompt, outPath) {
   const send = await firstVisible(page, SEND_SELECTORS);
   if (send) await send.click(); else await page.keyboard.press("Enter");
 
-  return imagePromise;
+  return watchForGeneratedImage(page, outPath);
 }

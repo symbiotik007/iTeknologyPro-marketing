@@ -21,6 +21,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import { askGeminiForImage } from "./lib/gemini.mjs";
+import { sendMessage } from "./lib/telegram.mjs";
 import {
   renderFeatureHighlight,
   renderHook,
@@ -41,28 +42,48 @@ const SESSION_FILE = path.join(ROOT, ".gen-tmp", "gemini-storage-state.json");
 const SITE_URL = "https://iteknology.co/onboarding";
 
 // Genera la ilustración vía Gemini (sesión local exportada). Si falla por
-// cualquier razón (sesión caducada, timeout, etc.) devuelve null — el
-// llamador debe caer al ícono SVG fijo, nunca bloquear la corrida por esto.
-async function tryGenerateIllustration(prompt, outPath) {
+// cualquier razón (sesión caducada, timeout, sin imagen a tiempo, etc.)
+// devuelve null — el llamador cae al ícono SVG fijo, nunca bloquea la
+// corrida por esto. OJO: askGeminiForImage puede devolver null en vez de
+// lanzar error (timeout esperando la imagen) -- eso pasaba silencioso antes
+// (bug real: post salió con ícono generico sin ningún aviso). Ahora se trata
+// igual que un error: se loggea y se reintenta una vez con browser fresco.
+async function tryGenerateIllustrationOnce(prompt, outPath) {
   let browser;
+  try {
+    browser = await chromium.launch({ headless: true });
+    const context = await browser.newContext({ storageState: SESSION_FILE, acceptDownloads: true });
+    const page = await context.newPage();
+    return await askGeminiForImage(page, prompt, outPath);
+  } finally {
+    if (browser) await browser.close().catch(() => {});
+  }
+}
+
+async function tryGenerateIllustration(prompt, outPath) {
   try {
     await readFile(SESSION_FILE);
   } catch {
     console.log("  (sin sesión de Gemini exportada — uso ícono fijo)");
+    await sendMessage("⚠️ No hay sesión de Gemini exportada — el post de hoy usó ícono genérico en vez de ilustración real. Corre `npm run chrome` + `node scripts/export-gemini-session.mjs` para arreglarlo.").catch(() => {});
     return null;
   }
-  try {
-    browser = await chromium.launch({ headless: true });
-    const context = await browser.newContext({ storageState: SESSION_FILE });
-    const page = await context.newPage();
-    const result = await askGeminiForImage(page, prompt, outPath);
-    return result;
-  } catch (err) {
-    console.log(`  (ilustración Gemini falló: ${err.message} — uso ícono fijo)`);
-    return null;
-  } finally {
-    if (browser) await browser.close().catch(() => {});
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const result = await tryGenerateIllustrationOnce(prompt, outPath);
+      if (result) return result;
+      console.log(`  (intento ${attempt}: Gemini no devolvió imagen a tiempo)`);
+    } catch (err) {
+      console.log(`  (intento ${attempt}: ilustración Gemini falló: ${err.message})`);
+    }
   }
+
+  console.log("  (2 intentos fallidos — uso ícono fijo, avisando por Telegram)");
+  await sendMessage(
+    "⚠️ La ilustración de Gemini falló 2 veces seguidas (probablemente sesión caducada) — el post de hoy salió con ícono genérico en vez de imagen real. Corre `npm run chrome` + `node scripts/export-gemini-session.mjs` para renovar la sesión."
+  ).catch(() => {});
+  return null;
 }
 
 async function readJson(file, fallback) {
