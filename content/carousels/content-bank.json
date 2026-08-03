@@ -36,5 +36,116 @@
     },
     "captionHook": "Tu inventario debería trabajar por ti.",
     "hashtags": "#RestaurantTech #RetailTech #B2BSaaS #iTeknology #GestionDeInventario"
+  },
+  {
+    "hook": {
+      "badgeText": "SIN COMISIONES",
+      "tone": "promise",
+      "hook": { "text": "Y si te quedaras con el 100% de cada pedido.", "accent": "100% de cada pedido." },
+      "illustrationPrompt": "Ilustracion flat digital vibrante de una billetera o caja registradora llena de monedas y billetes con un simbolo de porcentaje 100% flotando arriba, sensacion de ganancia completa, estilo moderno minimalista, paleta azul electrico #2563eb y celeste, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "problem": {
+      "eyebrow": "¿TE SUENA FAMILIAR?",
+      "title": "Así se ve tu día a día:",
+      "items": ["Pagas hasta 30% de comisión por pedido", "No sabes quién es realmente tu cliente", "Dependes de una app que no controlas"],
+      "illustrationPrompt": "Ilustracion flat digital de un recibo largo con varias lineas de deducciones y un porcentaje grande resaltado en rojo suave, sensacion de perdida de dinero, estilo moderno minimalista con lineas limpias, paleta gris azulado suave, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "consequence": {
+      "lines": [
+        { "text": "Vendiste $100.000." },
+        { "text": "La app se quedó con $30.000.", "strike": true },
+        { "text": "El cliente ni siquiera es tuyo." }
+      ],
+      "payoff": "Cada pedido por app de delivery es una venta que ya no es completamente tuya."
+    },
+    "solution": {
+      "title": "Así cambia tu negocio con iTeknology",
+      "items": ["Tu propia app y tienda online, sin intermediarios", "Te quedas con el 100% de cada venta", "Tú tienes los datos de tus clientes"],
+      "chipText": "0% de comisión",
+      "illustrationPrompt": "Ilustracion flat digital de una pantalla de celular mostrando una app de pedidos propia con el logo generico de una tienda y un checkmark verde de pago completo, estilo moderno minimalista, paleta azul electrico #2563eb y verde suave con acentos, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "resultCta": {
+      "result": "Deja de regalarle tus ganancias a las apps de delivery.",
+      "ctaHeadline": "Recupera el control de tus ventas hoy.",
+      "ctaButton": "Mira cómo funciona en 15 minutos",
+      "handle": "@iTeknology",
+      "illustrationPrompt": "Ilustracion flat digital vibrante de un dueno de negocio sonriente sosteniendo un celular con simbolo de dinero ascendente flotando junto a el, sensacion de exito y control, estilo moderno minimalista, paleta azul electrico y blanco con acentos dorados suaves, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "captionHook": "Y si te quedaras con el 100% de cada pedido.",
+    "hashtags": "#RestaurantTech #DeliveryApps #B2BSaaS #iTeknology #SinComisiones"
+  },
+  {
+    "hook": {
+      "badgeText": "TODO SINCRONIZADO",
+      "tone": "promise",
+      "hook": { "text": "Un solo menú, todos los canales.", "accent": "todos los canales." },
+      "illustrationPrompt": "Ilustracion flat digital vibrante de un menu digital central conectado por lineas a varios dispositivos (celular, tablet, laptop) alrededor, sensacion de sincronizacion perfecta, estilo moderno minimalista, paleta azul electrico #2563eb y celeste, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "problem": {
+      "eyebrow": "¿TE SUENA FAMILIAR?",
+      "title": "Así se ve tu día a día:",
+      "items": ["Cambias el precio en un lugar y se te olvida en otro", "El cliente ve un precio distinto en cada app", "Actualizar el menú te toma horas"],
+      "illustrationPrompt": "Ilustracion flat digital de varias pantallas de celular mostrando el mismo producto con precios distintos y confusos, sensacion de desorden e inconsistencia, estilo moderno minimalista con lineas limpias, paleta gris azulado suave, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "consequence": {
+      "lines": [
+        { "text": "Subiste el precio en la tienda." },
+        { "text": "Olvidaste hacerlo en la app.", "strike": true },
+        { "text": "El cliente reclama por la diferencia." }
+      ],
+      "payoff": "Cada inconsistencia de precio es un cliente confundido y una hora de tu día perdida arreglándolo."
+    },
+    "solution": {
+      "title": "Así cambia tu negocio con iTeknology",
+      "items": ["Editas el menú una sola vez", "Se actualiza en todos tus canales al instante", "Cero inconsistencias, cero reclamos"],
+      "chipText": "Sincronizado",
+      "illustrationPrompt": "Ilustracion flat digital de una pantalla de celular mostrando un editor de menu simple con un icono de sincronizacion y checkmark verde, estilo moderno minimalista, paleta azul electrico #2563eb y verde suave con acentos, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "resultCta": {
+      "result": "Deja de perder horas actualizando el mismo precio en cinco lugares distintos.",
+      "ctaHeadline": "Unifica tu menú desde hoy.",
+      "ctaButton": "Mira cómo funciona en 15 minutos",
+      "handle": "@iTeknology",
+      "illustrationPrompt": "Ilustracion flat digital vibrante de un dueno de negocio sonriente y relajado sosteniendo un celular con un menu digital ordenado flotando junto a el, sensacion de tranquilidad y control, estilo moderno minimalista, paleta azul electrico y blanco con acentos dorados suaves, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "captionHook": "Un solo menú, todos los canales.",
+    "hashtags": "#RestaurantTech #RetailTech #B2BSaaS #iTeknology #GestionDeMenu"
+  },
+  {
+    "hook": {
+      "badgeText": "DECIDE CON DATOS",
+      "tone": "promise",
+      "hook": { "text": "Tu negocio ya sabe qué vender más.", "accent": "qué vender más." },
+      "illustrationPrompt": "Ilustracion flat digital vibrante de una grafica de barras ascendente con una lupa y un foco de idea flotando alrededor, sensacion de claridad e insight, estilo moderno minimalista, paleta azul electrico #2563eb y celeste, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "problem": {
+      "eyebrow": "¿TE SUENA FAMILIAR?",
+      "title": "Así se ve tu día a día:",
+      "items": ["No sabes cuál es tu producto más vendido", "Decides el menú o inventario por intuición", "Los reportes te toman horas armar a mano"],
+      "illustrationPrompt": "Ilustracion flat digital de una pila de papeles y recibos desordenados con un signo de interrogacion flotando, sensacion de confusion y falta de informacion, estilo moderno minimalista con lineas limpias, paleta gris azulado suave, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "consequence": {
+      "lines": [
+        { "text": "Compraste más de lo que no se vende." },
+        { "text": "Te quedaste corto de lo que sí se vende.", "strike": true },
+        { "text": "Todo por adivinar en vez de saber." }
+      ],
+      "payoff": "Sin datos reales, cada decisión de negocio es una apuesta a ciegas."
+    },
+    "solution": {
+      "title": "Así cambia tu negocio con iTeknology",
+      "items": ["Ves tus productos más vendidos en tiempo real", "Reportes automáticos, sin armar nada a mano", "Decides con datos, no con intuición"],
+      "chipText": "Reporte listo",
+      "illustrationPrompt": "Ilustracion flat digital de una pantalla de celular mostrando un dashboard de ventas con graficas de barras y numeros claros, estilo moderno minimalista, paleta azul electrico #2563eb y verde suave con acentos, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "resultCta": {
+      "result": "Deja de adivinar qué comprar o qué vender más.",
+      "ctaHeadline": "Empieza a decidir con datos reales.",
+      "ctaButton": "Mira cómo funciona en 15 minutos",
+      "handle": "@iTeknology",
+      "illustrationPrompt": "Ilustracion flat digital vibrante de un dueno de negocio sonriente y seguro sosteniendo un celular con una grafica ascendente clara flotando junto a el, sensacion de confianza y exito, estilo moderno minimalista, paleta azul electrico y blanco con acentos dorados suaves, sin texto, sin logos, sin marcas de ningun tipo, fondo blanco simple, alta calidad, composicion centrada"
+    },
+    "captionHook": "Tu negocio ya sabe qué vender más.",
+    "hashtags": "#RestaurantTech #RetailTech #B2BSaaS #iTeknology #DatosDeNegocio"
   }
 ]
