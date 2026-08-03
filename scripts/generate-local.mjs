@@ -105,12 +105,15 @@ async function main() {
   const singleBank = await readJson(SINGLE_BANK_FILE, []);
   const carouselBank = await readJson(CAROUSEL_BANK_FILE, []);
   const state = await readJson(STATE_FILE, {
-    lastType: null,
+    cycleIndex: 0,
     singleIndex: 0,
     carouselIndex: 0,
   });
 
-  const type = forcedType || (state.lastType === "single" ? "carousel" : "single");
+  // Ciclo diario: 2 carruseles + 1 single (en ese orden). 3 disparos al día
+  // (Task Scheduler) avanzan este ciclo uno por uno.
+  const CYCLE = ["carousel", "single", "carousel"];
+  const type = forcedType || CYCLE[(state.cycleIndex || 0) % CYCLE.length];
 
   if (type === "single" && singleBank.length === 0) throw new Error("content/single-posts/content-bank.json vacío");
   if (type === "carousel" && carouselBank.length === 0) throw new Error("content/carousels/content-bank.json vacío");
@@ -176,7 +179,7 @@ async function main() {
   const draftFile = path.join(TMP_OUT, "draft.json");
   await writeFile(draftFile, JSON.stringify(draft, null, 2));
 
-  state.lastType = type;
+  if (!forcedType) state.cycleIndex = ((state.cycleIndex || 0) + 1) % CYCLE.length;
   await writeFile(STATE_FILE, JSON.stringify(state, null, 2) + "\n");
 
   git("add", "content/generator-state.json");

@@ -4,6 +4,9 @@
     "subtitle": "Asigna repartidores automáticamente, sin perder tiempo.",
     "cta": "Agenda tu Demo →",
     "icon": "dispatch",
+    "trustText": "Rutas optimizadas al instante",
+    "floatText": "Asignado",
+    "benefits": ["Sin llamadas ni radios", "Rutas más cortas", "Menos tiempo de espera"],
     "illustrationPrompt": "Ilustracion flat digital vibrante de un mapa de ciudad visto desde arriba con iconos de repartidores en moto y rutas de entrega trazadas en linea punteada, estilo moderno minimalista, paleta azul electrico #2563eb y celeste con acentos suaves, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
   },
   {
@@ -11,6 +14,9 @@
     "subtitle": "Catálogo, pedidos y pagos, listos hoy.",
     "cta": "Crea tu tienda gratis",
     "icon": "store",
+    "trustText": "Sin tarjeta de crédito",
+    "floatText": "En línea",
+    "benefits": ["Sin conocimientos técnicos", "Publica en minutos", "Desde cualquier dispositivo"],
     "illustrationPrompt": "Ilustracion flat digital vibrante de un escaparate de tienda online con productos flotando en tarjetas alrededor, estilo moderno minimalista, paleta azul electrico #2563eb y blanco con acentos suaves, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
   },
   {
@@ -18,6 +24,9 @@
     "subtitle": "Tú tienes el control total.",
     "cta": "Crea tu tienda gratis",
     "icon": "checkout",
+    "trustText": "Cambios en tiempo real",
+    "floatText": "Guardado",
+    "benefits": ["Sin pedir ayuda a nadie", "Cambios instantáneos", "Desde el celular"],
     "illustrationPrompt": "Ilustracion flat digital vibrante de una pantalla de celular mostrando un editor de producto: un campo de precio y una foto de producto siendo editada, cursor tocando la pantalla, estilo moderno minimalista, paleta azul electrico #2563eb y blanco con acentos suaves, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
   },
   {
@@ -25,6 +34,9 @@
     "subtitle": "Pedidos web, app y POS unificados.",
     "cta": "Agenda tu Demo →",
     "icon": "dashboard",
+    "trustText": "Todo centralizado",
+    "floatText": "Sincronizado",
+    "benefits": ["Cero hojas de cálculo", "Un solo lugar para todo", "Reportes automáticos"],
     "illustrationPrompt": "Ilustracion flat digital vibrante de un panel de control con graficas, tarjetas de pedidos y notificaciones flotando alrededor de una laptop, estilo moderno minimalista, paleta azul electrico #2563eb y blanco con acentos suaves, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
   },
   {
@@ -32,6 +44,9 @@
     "subtitle": "Deja de perder ventas cuando duermes.",
     "cta": "Crea tu tienda gratis",
     "icon": "clock",
+    "trustText": "Disponible siempre",
+    "floatText": "Venta nueva",
+    "benefits": ["Nunca cierra tu tienda", "Cobra mientras duermes", "Sin turnos ni horarios"],
     "illustrationPrompt": "Ilustracion flat digital vibrante de un celular con una notificacion de venta nueva de noche, luna y estrellas sutiles de fondo, estilo moderno minimalista, paleta azul electrico #2563eb y morado suave con acentos, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
   },
   {
@@ -39,6 +54,9 @@
     "subtitle": "El mejor momento para empezar es ahora.",
     "cta": "Crea tu tienda gratis",
     "icon": "growth",
+    "trustText": "Más de 500 negocios ya crecen así",
+    "floatText": "En crecimiento",
+    "benefits": ["Sin inversión inicial", "Resultados desde el día 1", "Escala sin límites"],
     "illustrationPrompt": "Ilustracion flat digital vibrante de una grafica de barras y una flecha ascendente con monedas y elementos de crecimiento flotando alrededor, estilo moderno minimalista, paleta azul electrico #2563eb y verde suave con acentos, sin texto, sin logos, sin marcas de ningun tipo, sin marcas de agua, fondo blanco simple, alta calidad, composicion centrada"
   }
 ]

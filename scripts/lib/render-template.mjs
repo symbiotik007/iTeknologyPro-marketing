@@ -60,14 +60,22 @@ function headlineHtml(headline) {
     .replace(escAccent.toUpperCase(), `<span class="accent">${escAccent.toUpperCase()}</span>`);
 }
 
-// Renderiza el slide "Feature Highlight" (single, o 1 slide de carrusel).
-// opts: { headline, subtitle, cta, icon } — icon es una key de icons.mjs
-// (default rota si no se especifica).
+// Renderiza el slide "Feature Highlight" v2 (mockup grande + profundidad,
+// feedback de storytelling aplicado — ver artifact aprobado 2026-08-02).
+// opts: { headline, subtitle, cta, icon, illustrationPath, trustText,
+//         floatText, benefits: string[] }
 // opts.illustrationPath: ruta a una imagen (generada por Gemini u otra fuente,
 // SIN logo/texto/CTA horneado — solo la escena) para meter en la caja visual
 // en vez del ícono SVG genérico. Si no se da, usa el ícono como antes.
+const BENEFIT_CHECK_ICON = `<svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
 export async function renderFeatureHighlight(opts, outPath) {
   const { headline, subtitle, cta, icon, theme = DEFAULT_THEME, illustrationPath } = opts;
+  const trustText = opts.trustText || "Configuración en minutos";
+  const floatText = opts.floatText || "Listo";
+  const benefits = opts.benefits && opts.benefits.length ? opts.benefits : [
+    "Sin conocimientos técnicos", "Cambios en tiempo real", "Desde cualquier dispositivo",
+  ];
 
   let visualHtml;
   if (illustrationPath) {
@@ -81,12 +89,19 @@ export async function renderFeatureHighlight(opts, outPath) {
     visualHtml = icons[iconKey];
   }
 
-  let html = await readFile(path.join(TEMPLATE_DIR, templateFileFor("feature-highlight", theme)), "utf8");
+  const benefitsHtml = benefits
+    .map((b) => `<div class="benefit"><div class="check">${BENEFIT_CHECK_ICON}</div><span>${escapeHtml(b)}</span></div>`)
+    .join("\n");
+
+  let html = await readFile(path.join(TEMPLATE_DIR, "feature-highlight-light-v2.html"), "utf8");
   html = html
     .replace("LOGO_DATA_URI", await logoLongDataUri())
+    .replace("TRUST_TEXT", escapeHtml(trustText))
     .replace("HEADLINE_HTML", headlineHtml(headline))
     .replace("SUBTITLE_TEXT", escapeHtml(subtitle))
     .replace("ICON_SVG", visualHtml)
+    .replace("FLOAT_TEXT", escapeHtml(floatText))
+    .replace("BENEFITS_HTML", benefitsHtml)
     .replace("CTA_TEXT", escapeHtml(cta));
 
   const browser = await chromium.launch({ headless: true });
