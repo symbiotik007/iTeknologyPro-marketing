@@ -5,24 +5,42 @@ export const GRAPH = "https://graph.facebook.com/v21.0";
 
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// "API access blocked" (code 200) y similares son bloqueos temporales de Meta
+// (rate limit / revisión automática), no errores de credenciales: se
+// autoresuelven en minutos. Sin retry, un solo hiccup tumbaba la corrida
+// ENTERA antes de intentar cualquier item de la queue (ver getPageToken, que
+// corre una vez antes del loop). Reintentamos con backoff antes de rendirnos.
+const TRANSIENT_MESSAGES = ["API access blocked", "OAuthException"];
+function isTransient(json) {
+  const msg = json?.error?.message || "";
+  const code = json?.error?.code;
+  return code === 200 || TRANSIENT_MESSAGES.some((m) => msg.includes(m));
+}
+
+async function graphFetch(url, opts) {
+  const RETRIES = 3;
+  const GAP_MS = 10_000;
+  for (let attempt = 1; attempt <= RETRIES; attempt++) {
+    const res = await fetch(url, opts);
+    const body = await res.json();
+    if (res.ok) return body;
+    if (attempt < RETRIES && isTransient(body)) {
+      console.log(`  (Graph API bloqueo temporal, reintento ${attempt}/${RETRIES} en ${GAP_MS / 1000}s: ${JSON.stringify(body.error || body)})`);
+      await sleep(GAP_MS);
+      continue;
+    }
+    throw new Error(`Graph API ${res.status}: ${JSON.stringify(body.error || body)}`);
+  }
+}
+
 export async function graph(url, params) {
   const body = new URLSearchParams(params);
-  const res = await fetch(url, { method: "POST", body });
-  const json = await res.json();
-  if (!res.ok) {
-    throw new Error(`Graph API ${res.status}: ${JSON.stringify(json.error || json)}`);
-  }
-  return json;
+  return graphFetch(url, { method: "POST", body });
 }
 
 export async function graphGet(path, params = {}) {
   const qs = new URLSearchParams(params).toString();
-  const res = await fetch(`${GRAPH}/${path}${qs ? `?${qs}` : ""}`);
-  const json = await res.json();
-  if (!res.ok) {
-    throw new Error(`Graph API ${res.status}: ${JSON.stringify(json.error || json)}`);
-  }
-  return json;
+  return graphFetch(`${GRAPH}/${path}${qs ? `?${qs}` : ""}`, {});
 }
 
 // Publicar en una Página de Facebook exige un Page Access Token, no el token de
