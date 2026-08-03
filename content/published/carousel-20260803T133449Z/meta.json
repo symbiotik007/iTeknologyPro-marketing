@@ -1,0 +1,16 @@
+{
+  "id": "carousel-20260803T133449Z",
+  "type": "carousel",
+  "targets": [
+    "fb",
+    "ig"
+  ],
+  "createdAt": "2026-08-03T13:34:49.040Z",
+  "status": "published",
+  "telegramMessageId": 802,
+  "results": {
+    "fb": "1281288388394495_122101818441418511",
+    "ig": "18360854413210542"
+  },
+  "decidedAt": "2026-08-03T16:44:41.317Z"
+}
