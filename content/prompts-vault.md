@@ -95,12 +95,12 @@ Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, apetitoso pe
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, editor limpio, sin emojis. Vista de edición de un producto con campos de precio y foto. Titular: "EDITA PRECIOS Y FOTOS EN SEGUNDOS". Subtítulo: "Tú tienes el control total." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 14. Importa tu catálogo por CSV
+### 14. Importa tu catálogo por CSV -USED → 10.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, minimalista, sin emojis. Una hoja de cálculo que se transforma en una tienda con productos. Titular: "IMPORTA TU CATÁLOGO POR CSV". Subtítulo: "Cientos de productos en un clic." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
 
-### 15. Descripciones con inteligencia artificial
+### 15. Descripciones con inteligencia artificial -USED → 11.jpg
 ```
 Post cuadrado 1080x1080, marca "iTeknology". Azul #2563eb + blanco, premium, sin emojis. Un producto con un texto generado automáticamente y un ícono de IA/chispa. Titular: "DESCRIPCIONES CON IA". Subtítulo: "Textos que venden, escritos por ti." Logo iTeknology + botón azul "Crea tu tienda gratis". Sin marcas de agua.
 ```
