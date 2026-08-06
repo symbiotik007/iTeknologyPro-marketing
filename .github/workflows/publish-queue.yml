@@ -1,13 +1,15 @@
 name: Publicar queue (aprobación Telegram) 3x/día
 
 on:
-  schedule:
-    # 14:30 UTC ≈ 9:30 a.m. Colombia
-    - cron: "30 14 * * *"
-    # 19:00 UTC ≈ 2:00 p.m. Colombia
-    - cron: "0 19 * * *"
-    # 00:00 UTC ≈ 7:00 p.m. Colombia (mismo día, UTC-5 sin horario de verano)
-    - cron: "0 0 * * *"
+  # schedule DESACTIVADO — publicación automática apagada. Reactivar
+  # descomentando el bloque de abajo.
+  # schedule:
+  #   # 14:30 UTC ≈ 9:30 a.m. Colombia
+  #   - cron: "30 14 * * *"
+  #   # 19:00 UTC ≈ 2:00 p.m. Colombia
+  #   - cron: "0 19 * * *"
+  #   # 00:00 UTC ≈ 7:00 p.m. Colombia (mismo día, UTC-5 sin horario de verano)
+  #   - cron: "0 0 * * *"
   workflow_dispatch: {} # botón manual "Run workflow" en la pestaña Actions
 
 permissions:
