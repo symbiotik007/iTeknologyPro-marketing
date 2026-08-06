@@ -1,0 +1,11 @@
+{
+  "id": "carousel-20260806T180041Z",
+  "type": "carousel",
+  "targets": [
+    "fb",
+    "ig"
+  ],
+  "createdAt": "2026-08-06T18:00:41.756Z",
+  "status": "pending",
+  "telegramMessageId": null
+}
