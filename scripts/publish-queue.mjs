@@ -79,20 +79,40 @@ async function listPendingItems() {
   return items;
 }
 
+async function persistPartialResults(itemDir, meta, results) {
+  const updated = { ...meta, results: { ...(meta.results || {}), ...results } };
+  await writeFile(path.join(itemDir, "meta.json"), JSON.stringify(updated, null, 2) + "\n");
+  return updated;
+}
+
 async function publishItem(item, pageToken, pageId, igUserId) {
-  const { meta } = item;
+  let { meta } = item;
   const itemDir = path.join(QUEUE_DIR, item.dir);
   const assetsDir = path.join(itemDir, "assets");
   const caption = await readFile(path.join(itemDir, "caption.txt"), "utf8");
-  const results = {};
+  // Resultados ya persistidos en meta.json (de una corrida anterior que falló
+  // a mitad de camino) — no volvemos a publicar en un target que ya tiene id.
+  const results = { ...(meta.results || {}) };
+
+  // Publica en `target` solo si no está ya en `results`, y si sale bien lo
+  // persiste al toque en meta.json — así un fallo posterior (ej. IG después
+  // de FB) no hace que la próxima corrida reposte FB de nuevo.
+  async function doTarget(target, fn) {
+    if (results[target]) {
+      console.log(`  (${target} ya publicado antes: ${results[target]}, salto)`);
+      return;
+    }
+    results[target] = await fn();
+    meta = await persistPartialResults(itemDir, meta, results);
+  }
 
   if (meta.type === "single") {
     const url = rawUrl(`content/queue/${item.dir}/assets/01.jpg`);
     if (DRY) {
       console.log(`  DRY: postearía imagen única ${url}`);
     } else {
-      if (meta.targets.includes("fb")) results.fb = await postFacebookPhoto(pageId, pageToken, url, caption);
-      if (meta.targets.includes("ig")) results.ig = await postInstagramImage(igUserId, pageToken, url, caption);
+      if (meta.targets.includes("fb")) await doTarget("fb", () => postFacebookPhoto(pageId, pageToken, url, caption));
+      if (meta.targets.includes("ig")) await doTarget("ig", () => postInstagramImage(igUserId, pageToken, url, caption));
     }
   } else if (meta.type === "carousel") {
     const files = (await readdir(assetsDir)).filter((f) => /\.jpe?g$/i.test(f)).sort();
@@ -100,16 +120,16 @@ async function publishItem(item, pageToken, pageId, igUserId) {
     if (DRY) {
       console.log(`  DRY: postearía carrusel de ${urls.length} imágenes`);
     } else {
-      if (meta.targets.includes("fb")) results.fb = await postFacebookCarousel(pageId, pageToken, urls, caption);
-      if (meta.targets.includes("ig")) results.ig = await postInstagramCarousel(igUserId, pageToken, urls, caption);
+      if (meta.targets.includes("fb")) await doTarget("fb", () => postFacebookCarousel(pageId, pageToken, urls, caption));
+      if (meta.targets.includes("ig")) await doTarget("ig", () => postInstagramCarousel(igUserId, pageToken, urls, caption));
     }
   } else if (meta.type === "reel") {
     const url = rawUrl(`content/queue/${item.dir}/assets/video.mp4`);
     if (DRY) {
       console.log(`  DRY: postearía reel ${url}`);
     } else {
-      if (meta.targets.includes("fb")) results.fb = await postFacebookVideo(pageId, pageToken, url, caption);
-      if (meta.targets.includes("ig")) results.ig = await postInstagramReel(igUserId, pageToken, url, caption);
+      if (meta.targets.includes("fb")) await doTarget("fb", () => postFacebookVideo(pageId, pageToken, url, caption));
+      if (meta.targets.includes("ig")) await doTarget("ig", () => postInstagramReel(igUserId, pageToken, url, caption));
     }
   } else {
     throw new Error(`type desconocido: ${meta.type}`);
