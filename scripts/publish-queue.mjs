@@ -107,7 +107,9 @@ async function publishItem(item, pageToken, pageId, igUserId) {
   }
 
   if (meta.type === "single") {
-    const url = rawUrl(`content/queue/${item.dir}/assets/01.jpg`);
+    const [singleFile] = (await readdir(assetsDir)).filter((f) => /\.(jpe?g|png)$/i.test(f)).sort();
+    if (!singleFile) throw new Error(`sin imagen en ${assetsDir}`);
+    const url = rawUrl(`content/queue/${item.dir}/assets/${singleFile}`);
     if (DRY) {
       console.log(`  DRY: postearía imagen única ${url}`);
     } else {
@@ -115,7 +117,7 @@ async function publishItem(item, pageToken, pageId, igUserId) {
       if (meta.targets.includes("ig")) await doTarget("ig", () => postInstagramImage(igUserId, pageToken, url, caption));
     }
   } else if (meta.type === "carousel") {
-    const files = (await readdir(assetsDir)).filter((f) => /\.jpe?g$/i.test(f)).sort();
+    const files = (await readdir(assetsDir)).filter((f) => /\.(jpe?g|png)$/i.test(f)).sort();
     const urls = files.map((f) => rawUrl(`content/queue/${item.dir}/assets/${f}`));
     if (DRY) {
       console.log(`  DRY: postearía carrusel de ${urls.length} imágenes`);
